@@ -1,44 +1,48 @@
-<div>
-	
-	<div class="machine-detail bg-gray-100 p-4 rounded mt-4">
-		@if(!empty($selectedMachine))
+<div id="machine-detail" class="mt-6">
+	<div class="bg-white shadow-sm border rounded-lg p-6">
+		@if (!empty($selectedMachine))
 			{{-- 選択マシン情報 --}}
-			<p><strong>店舗名：</strong>{{ $selectedMachine['branch'] ?? '情報なし' }}</p>
-			<p><strong>ゲーム機コード：</strong>{{ $selectedMachine['code'] ?? '情報なし' }}</p>
-			<p><strong>ゲーム機名：</strong>{{ $selectedMachine['name'] ?? '情報なし' }}</p>
-			<p><strong>基盤名：</strong>{{ $selectedMachine['board'] ?? '情報なし' }}</p>
-			<p><strong>種別名：</strong>{{ $selectedMachine['category'] ?? '情報なし' }}</p>
-			<p><strong>設置場所：</strong>{{ $selectedMachine['location'] ?? '情報なし' }}</p>
-			<p><strong>状態：</strong>{{ $selectedMachine['status'] ?? '情報なし' }}</p>
-			<p><strong>通信シリアル：</strong>{{ $selectedMachine['serial'] ?? '情報なし' }}</p>
-			<p><strong>システムＩＤ：</strong>{{ $selectedMachine['system_id'] ?? '情報なし' }}</p>
-			<p><strong>プラン：</strong>{{ $selectedMachine['plan'] ?? '情報なし' }}</p>
-			<p><strong>購入金額(税込)：</strong>{{ $selectedMachine['price'] ?? '情報なし' }}</p>
-			<p><strong>面積：</strong>{{ $selectedMachine['area'] ?? '情報なし' }}</p>
-			<p><strong>会社区分：</strong>{{ $selectedMachine['ownership'] ?? '情報なし' }}</p>
-			<p><strong>本社コメント：</strong>{{ $selectedMachine['note'] ?? '情報なし' }}</p>
-			{{--
-			<p><strong>休止理由・機械状態①：</strong>{{ $selectedMachine[''] }}</p>
-			<p><strong>休止理由・機械状態②：</strong>{{ $selectedMachine[''] }}</p>
-			<p><strong>休止理由・機械状態③：</strong>{{ $selectedMachine[''] }}</p>
-			<p><strong>休止理由・機械状態④：</strong>{{ $selectedMachine[''] }}</p>
-			<p><strong>休止理由・機械状態⑤：</strong>{{ $selectedMachine[''] }}</p>
-			--}}
+			<h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">選択中のマシン情報</h3>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 text-sm text-gray-700">
+				<div><span class="font-semibold">店舗名：</span>{{ $selectedMachine['branch'] ?? '情報なし' }}</div>
+				<div><span class="font-semibold">ゲーム機コード：</span>{{ $selectedMachine['code'] ?? '情報なし' }}</div>
+				<div><span class="font-semibold">ゲーム機名：</span>{{ $selectedMachine['name'] ?? '情報なし' }}</div>
+				<div><span class="font-semibold">基盤名：</span>{{ $selectedMachine['board'] ?? '情報なし' }}</div>
+				<div><span class="font-semibold">種別名：</span>{{ $selectedMachine['category'] ?? '情報なし' }}</div>
+				<div><span class="font-semibold">設置場所：</span>{{ $selectedMachine['location'] ?? '情報なし' }}</div>
+				<div><span class="font-semibold">状態：</span>{{ $selectedMachine['status'] ?? '情報なし' }}</div>
+				<div><span class="font-semibold">通信シリアル：</span>{{ $selectedMachine['serial'] ?? '情報なし' }}</div>
+				<div><span class="font-semibold">システムID：</span>{{ $selectedMachine['system_id'] ?? '情報なし' }}</div>
+				<div><span class="font-semibold">プラン：</span>{{ $selectedMachine['plan'] ?? '情報なし' }}</div>
+				<div><span class="font-semibold">購入金額(税込)：</span>{{ $selectedMachine['price'] ?? '情報なし' }}</div>
+				<div><span class="font-semibold">面積：</span>{{ $selectedMachine['area'] ?? '情報なし' }}</div>
+				<div><span class="font-semibold">会社区分：</span>{{ $selectedMachine['ownership'] ?? '情報なし' }}</div>
+				<div class="md:col-span-2"><span class="font-semibold">本社コメント：</span>{{ $selectedMachine['note'] ?? '情報なし' }}</div>
+
+				{{-- 
+				<div><span class="font-semibold">休止理由・機械状態①：</span>{{ $selectedMachine[''] }}</div>
+				<div><span class="font-semibold">休止理由・機械状態②：</span>{{ $selectedMachine[''] }}</div>
+				<div><span class="font-semibold">休止理由・機械状態③：</span>{{ $selectedMachine[''] }}</div>
+				<div><span class="font-semibold">休止理由・機械状態④：</span>{{ $selectedMachine[''] }}</div>
+				<div><span class="font-semibold">休止理由・機械状態⑤：</span>{{ $selectedMachine[''] }}</div>
+				--}}
+			</div>
+
 			{{-- 選択マシン情報end --}}
-			<hr class="my-4 border-t border-dashed border-gray-400">
-			<x-button
-				wire:click="$dispatch( 'reflectForm', { selectedMachineCode: '{{ $selectedMachine['code'] }}'} )"
-				wire:key="{{ $selectedMachine['code'] }}" 
-				label="このマシンについて起票する"
-				variant="secondary"
-			/>
+			<hr class="my-6 border-t border-dashed border-gray-300">
+
+			<div class="text-right">
+				<x-button
+					wire:click="$dispatch('reflectForm', { selectedMachineCode: '{{ $selectedMachine['code'] }}' })"
+					wire:key="{{ $selectedMachine['code'] }}"
+					label="このマシンについて起票する"
+					variant="secondary"
+					x-on:click="document.getElementById('report-form')?.scrollIntoView({ behavior: 'smooth' })"
+				/>
+			</div>
 		@else
 			<p class="text-gray-500">マシンが選択されていません</p>
 		@endif
 	</div>
-
-
-	{{--
-
---}}
 </div>

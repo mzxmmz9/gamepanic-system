@@ -25,21 +25,48 @@ class FailureReportController extends Controller
 		return view('failure_reports.create');
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 */
-	public function confirm(Request $request)
+	public function submit(Request $request)
 	{
+		/*
 		$validated = $request->validate([
-			'body' => 'required|string',
+			'occurred_at' => 'required|date',
+			'occurred_by' => 'required|string',
+			// 他のバリデーション
 		]);
 
-		return view('failure_reports.confirm', ['input' => $validated]);
+		session(['report_data' => $validated]);
+	*/
+		return redirect()->route('failure_reports.confirm');
+	}
+
+	
+	public function confirm()
+	{
+
+		$data = session('report_data');
+
+		if (!$data) {
+			return redirect()->route('failure_reports.submit')->with('error', '確認データがありません');
+		}
+
+		return view('failure_reports.confirm', compact('data'));
 	}
 
 	public function store(Request $request)
 	{
-		FailureReport::create($request->all());
+		$data = session('report_data');
+
+		// null チェック
+		if (!$data) {
+			return redirect()->route('failure_reports.create')->withErrors('報告データ登録エラー。もう一度、登録処理を行ってください。');
+		}
+
+		// モデルに保存
+		FailureReport::create($data);
+
+		// セッションをクリア
+		session()->forget('report_data');
+
 		return redirect()->route('dashboard')->with('success', '報告を登録しました');
 	}
 

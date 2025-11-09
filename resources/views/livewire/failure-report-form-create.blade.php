@@ -1,7 +1,8 @@
 <div>
 
 	<div class="m-6 w-[90%] sm:w-[80%] md:w-[70%] lg:w-[60%] xl:w-[50%] mx-auto p-6 bg-white rounded-lg shadow-md">
-		<form wire:submit.prevent="submit" wire:key="{{ $machine_code }}"  class="space-y-4">
+		<form wire:submit.prevent="submit" method="POST" wire:key="{{ $machine_code }}"  class="space-y-4" id="report-form">
+			@csrf
 			<div><label class="inline-block w-24 mr-4">発生日</label><input type="date" wire:model="occurred_at" max="{{ now()->format('Y-m-d') }}" value="{{ $machine_name }}"></div>
 			<div><label class="inline-block w-24 mr-4">発生日担当者</label><input type="text" wire:model="occurred_by" value="{{ $machine_name }}" placeholder="発生日担当者"></div>
 			<div>
@@ -17,7 +18,10 @@
 			<div><label class="inline-block w-24 mr-4">ST番号</label><input type="text" wire:model="st_num" value="{{ $st_num }}" placeholder="ST番号"></div>
 			<div><label class="inline-block w-24 mr-4">故障内容</label><textarea wire:model="malfunction" value="{{ $malfunction }}" placeholder="故障内容"></textarea></div>
 			<div><label class="inline-block w-24 mr-4">備考</label><textarea wire:model="note" value="{{ $note }}" placeholder="備考"></textarea></div>
-			<button type="submit">送信</button>
+
+			<button type="submit">内容を確認する</button>
+		</form>
+
 
 		</form>
 	</div>

@@ -25,6 +25,7 @@
 					wire:key="{{ $machine->code }}" 
 					class="p-2 odd:bg-gray-100 even:bg-white" 
 					style="cursor:pointer;"
+					x-on:click="document.getElementById('machine-detail')?.scrollIntoView({ behavior: 'smooth' })"
 				>
 					<span>{{ $machine->code }}</span><span>{{ $machine->name }}</span>
 				</li>

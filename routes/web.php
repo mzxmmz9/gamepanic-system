@@ -35,7 +35,6 @@ Route::middleware('auth')->group(function () {
 
 	// 故障発生書作成フォーム
 	Route::resource('failure-reports', FailureReportController::class);
-	Route::post('/failure-reports/confirm', [FailureReportController::class, 'confirm'])->name('failure-reports.confirm');
 	Route::post('/failure-reports/back', function () {
 		session()->flashInput(request()->input());
 		return redirect()->route('failure-reports.create');
@@ -62,7 +61,17 @@ Route::middleware('auth')->group(function () {
 
 	// 店舗・分類など
 	Route::resource('branches', BranchController::class)->only(['create', 'index']);
+
+	Route::get('/failure_reports/create', [FailureReportController::class, 'create'])->name('failure_reports.create');
+	// 入力処理（POST）
+	Route::post('/failure_reports/submit', [FailureReportController::class, 'submit'])->name('failure_reports.submit');
+	// 確認画面（GET）
+	Route::get('/failure_reports/confirm', [FailureReportController::class, 'confirm'])->name('failure_reports.confirm');
+	// 登録処理（POST）
+	Route::post('/failure_reports/store', [FailureReportController::class, 'store'])->name('failure_reports.store');
+
 });
+
 
 // 認証関連
 require __DIR__.'/auth.php';

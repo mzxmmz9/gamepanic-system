@@ -20,6 +20,11 @@ class FailureReportFormCreate extends Component
 	public $resumed_at, $resumed_by;
 	public $note;
 
+	public function render()
+	{
+		return view('livewire.failure-report-form-create');
+	}
+
 	#[On('reflectForm')]
 	public function reflectForm(string $selectedMachineCode)
 	{
@@ -44,27 +49,24 @@ class FailureReportFormCreate extends Component
 		}
 	}
 
-	public function submit()
-	{
-		FailureReport::create([
-			'branch_id' => $this->branch,
-			'occurred_at' => $this->occurred_at,
-			'occurred_by' => $this->occurred_by,
-			'process' => $this->process,
-			'machine_code' => $this->machine_code,
-			'machine_name' => $this->machine_name,
-			'st_num' => $this->st_num,
-			'malfunction' => $this->malfunction,
-			'resumed_at' => $this->resumed_at,
-			'resumed_by' => $this->resumed_by,
-			'note' => $this->note,
-		]);
+    public function submit()
+    {
+        $validated = $this->validate([
+            'occurred_at' => 'required|date',
+            'occurred_by' => 'required|string',
+            'process' => 'required|string',
+            'machine_code' => 'required|string',
+            'machine_name' => 'required|string',
+            'st_num' => 'nullable|string',
+            'malfunction' => 'required|string',
+            'note' => 'nullable|string',
+        ]);
 
-		session()->flash('message', '報告書を送信しました');
-	}
+        session(['report_data' => $validated]);
 
-	public function render()
-	{
-		return view('livewire.failure-report-form-create');
-	}
+        return redirect()->route('failure_reports.confirm');
+    }
+
+
+
 }
