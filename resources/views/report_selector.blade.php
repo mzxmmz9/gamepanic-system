@@ -7,12 +7,19 @@
 		<p class="text-gray-700">登録したい報告の種類を選択してください：</p>
 
 		<div class="space-y-3">
+			<!-- マシン故障発生書作成 -->
 			<a href="{{ route('failure-reports.create') }}" class="block px-4 py-2 rounded">
-				マシン故障発生書を作成する
+				マシン故障発生書を作成
 			</a>
 
+			<!-- マシン休止登録 -->
+			<a href="{{ route('machine_downtimes.create') }}" class="block px-4 py-2 rounded">
+				マシンの休止日時を登録
+			</a>
+
+			<!-- マシン復旧日登録 -->
 			<a href="{{ route('failure-reports.index') }}" class="block px-4 py-2 rounded">
-				マシンの復旧日を入力する
+				故障マシンの復旧日もしくはマシン停止日を登録
 			</a>
 		</div>
 	</div>

@@ -13,7 +13,9 @@ use App\Http\Controllers\{
 	MaintenanceReportController,
 	FailureReportController,
 	ImageController,
+	MachineDowntimeController,
 };
+
 
 // 初期表示
 Route::get('/', InitController::class)->name('init');
@@ -70,6 +72,9 @@ Route::middleware('auth')->group(function () {
 	// 登録処理（POST）
 	Route::post('/failure_reports/store', [FailureReportController::class, 'store'])->name('failure_reports.store');
 
+	// マシン休止情報登録
+	Route::resource('machine_downtimes', MachineDowntimeController::class);
+	Route::post('machine_downtimes/confirm', [MachineDowntimeController::class, 'confirm'])->name('machine_downtimes.confirm');
 });
 
 
