@@ -37,16 +37,6 @@ class FailureReportFormCreate extends Component
 			->orderBy('occurred_at', 'desc')//発生日が最新のもの
 			->orderBy('created_at', 'desc')//同日があれば作成日で絞る
 			->first();
-		//対象のマシンコードかつ稼働日null(故障中)のレポートが存在する場合はそれをベースにする
-		if($unresolvedReport && ($unresolvedReport->resumed_at) === null ){
-			$this->id = $unresolvedReport->id;
-			$this->occurred_at = $unresolvedReport->occurred_at;
-			$this->occurred_by = $unresolvedReport->occurred_by;
-			$this->process = $unresolvedReport->process;
-			$this->st_num = $unresolvedReport->st_num;
-			$this->malfunction = $unresolvedReport->malfunction;
-			$this->note = $unresolvedReport->note;
-		}
 	}
 
     public function submit()

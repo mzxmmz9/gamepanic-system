@@ -8,6 +8,13 @@ use App\Models\MachineDowntime;
 
 class MachineDowntimeController extends Controller
 {
+    public string $machine_code = '';
+    protected $listeners = ['machineCodeSelected' => 'setMachineCode'];
+    public function setMachineCode($code)
+    {
+        $this->machine_code = $code;
+    }
+
     /**
      * マシン休止開始日時を記入する画面
      */
@@ -19,28 +26,25 @@ class MachineDowntimeController extends Controller
     public function confirm(Request $request)
     {
         $validated = $request->validate([
-            'reason' => 'required|string'
-            , 'downtime_start' => 'required|date'
+            'machine_code' => 'required|string',
+            'downtime_start' => 'required|date',
+            'downtime_end' => 'nullable|date|after_or_equal:downtime_start',
+            'reason' => 'nullable|string',
         ]);
 
-        return view('machine_downtimes.confirm', compact('validated'));
+        return view('machine_downtimes.confirm', ['data' => $validated]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        MachineDowntime::create($request->only([
-            'reason'
-            , 'downtime_start'
-        ]));
+        $data = $request->only(['machine_code', 'downtime_start', 'downtime_end', 'reason']);
+        MachineDowntime::create($data);
 
-        return redirect()->route('dashboard')->with('success', '登録しました');
+        return redirect()->route('machine_downtimes.index')->with('success', '登録完了しました');
     }
 
     /**
-     * マシンの休止終了日時を記入するマシン を選択する一覧画面
+     * 休止終了日時を記入するマシン を選択する一覧画面
      */
     public function index()
     {
