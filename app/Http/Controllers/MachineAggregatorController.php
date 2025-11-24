@@ -4,13 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\MachineAggregator;
 use App\Models\Branch;
+use App\Models\MachineDowntime;
+use Illuminate\Http\Request;
 
 class MachineAggregatorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $aggregators = MachineAggregator::orderBy('store_name')->get();
-        $branches = Branch::orderBy('name')->get();
-        return view('machine_aggregators.index', compact('aggregators', 'branches'));
+        //全店取得
+        $branches = Branch::all();
+
+        //休止マシン一覧取得
+        $machines = MachineDowntime::all();
+
+        return view('machine_aggregators.index', compact('branches', 'machines'));
     }
+
 }

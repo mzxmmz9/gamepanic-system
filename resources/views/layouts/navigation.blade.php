@@ -31,6 +31,11 @@
                         {{ __('Bookmarks') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('machine_aggregators.index')" :active="request()->routeIs('machine_aggregators.index')">
+                        {{ __('Aggregator') }}
+                    </x-nav-link>
+                </div>
 
             </div>
 
@@ -95,7 +100,9 @@
             <x-responsive-nav-link :href="route('bookmarks.index')" :active="request()->routeIs('bookmarks.index')">
                 {{ __('Bookmarks') }}
             </x-responsive-nav-link>
-
+            <x-responsive-nav-link :href="route('machine_aggregators.index')" :active="request()->routeIs('machine_aggregators.index')">
+                {{ __('Aggregator') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->

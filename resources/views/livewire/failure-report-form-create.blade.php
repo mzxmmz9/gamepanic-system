@@ -1,7 +1,7 @@
 <div>
 
 	<div class="m-6 w-[90%] sm:w-[80%] md:w-[70%] lg:w-[60%] xl:w-[50%] mx-auto p-6 bg-white rounded-lg shadow-md">
-		<form wire:submit.prevent="submit" method="POST" wire:key="{{ $machine_code }}"  class="space-y-4" id="report-form">
+		<form wire:submit.prevent="submit" method="POST" wire:key="{{ $machine_code }}" class="space-y-4" id="report-form">
 			@csrf
 			<div><label class="inline-block w-24 mr-4">発生日</label><input type="date" wire:model="occurred_at" max="{{ now()->format('Y-m-d') }}" value="{{ $machine_name }}"></div>
 			<div><label class="inline-block w-24 mr-4">発生日担当者</label><input type="text" wire:model="occurred_by" value="{{ $machine_name }}" placeholder="発生日担当者"></div>
