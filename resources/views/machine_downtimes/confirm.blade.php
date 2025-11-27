@@ -2,39 +2,23 @@
     <x-slot name="header">
         <h2 class="text-xl font-bold text-gray-800">報告種別の選択</h2>
     </x-slot>
-    <div class="container mx-auto px-4 py-6">
-        <h1 class="text-2xl font-bold mb-4">休止情報の確認</h1>
+    <div class="space-y-4">
+        <h2 class="text-lg font-bold">入力内容の確認</h2>
 
-        <form method="POST" action="{{ route('machine_downtime.store') }}">
-            @csrf
+        <p>マシンコード: {{ $report_data['machine_code'] }}</p>
+        <p>休止開始日時: {{ $report_data['downtime_start'] }}</p>
+        <p>休止終了日時: {{ $report_data['downtime_end'] ?? '未入力' }}</p>
+        <p>休止理由: {{ $report_data['reason'] ?? '未入力' }}</p>
 
-            <div class="mb-4">
-                <label class="font-medium">機械コード：</label>
-                <div>{{ $data['machine_code'] }}</div>
-                <input type="hidden" name="machine_code" value="{{ $data['machine_code'] }}">
-            </div>
+        <form action="{{ route('machine_downtimes.store') }}" method="POST">
+            <input type="hidden" name="machine_code" value="{{ $report_data['machine_code'] }}">
+            <input type="hidden" name="downtime_start" value="{{ $report_data['downtime_start'] }}">
+            <input type="hidden" name="downtime_end" value="{{ $report_data['downtime_end'] }}">
+            <input type="hidden" name="reason" value="{{ $report_data['reason'] }}">
 
-            <div class="mb-4">
-                <label class="font-medium">開始日時：</label>
-                <div>{{ $data['downtime_start'] }}</div>
-                <input type="hidden" name="downtime_start" value="{{ $data['downtime_start'] }}">
-            </div>
-
-            <div class="mb-4">
-                <label class="font-medium">終了日時：</label>
-                <div>{{ $data['downtime_end'] ?? '未入力' }}</div>
-                <input type="hidden" name="downtime_end" value="{{ $data['downtime_end'] }}">
-            </div>
-
-            <div class="mb-4">
-                <label class="font-medium">理由：</label>
-                <div>{{ $data['reason'] }}</div>
-                <input type="hidden" name="reason" value="{{ $data['reason'] }}">
-            </div>
-
-            <div class="flex justify-between mt-6">
-                <button type="button" onclick="history.back()" class="btn btn-outline">戻る</button>
+            <div class="flex justify-end space-x-2">
                 <button type="submit" class="btn btn-primary">登録する</button>
+                <a href="{{ route('machine_downtimes.create') }}" class="btn">戻る</a>
             </div>
         </form>
     </div>

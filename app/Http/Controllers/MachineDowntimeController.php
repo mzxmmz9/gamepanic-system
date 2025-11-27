@@ -10,6 +10,7 @@ class MachineDowntimeController extends Controller
 {
     public string $machine_code = '';
     protected $listeners = ['machineCodeSelected' => 'setMachineCode'];
+    
     public function setMachineCode($code)
     {
         $this->machine_code = $code;
@@ -25,14 +26,7 @@ class MachineDowntimeController extends Controller
 
     public function confirm(Request $request)
     {
-        $validated = $request->validate([
-            'machine_code' => 'required|string',
-            'downtime_start' => 'required|date',
-            'downtime_end' => 'nullable|date|after_or_equal:downtime_start',
-            'reason' => 'nullable|string',
-        ]);
-
-        return view('machine_downtimes.confirm', ['data' => $validated]);
+        return view('machine_downtimes.confirm');
     }
 
     public function store(Request $request)

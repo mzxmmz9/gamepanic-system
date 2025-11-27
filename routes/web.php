@@ -75,7 +75,7 @@ Route::middleware('auth')->group(function () {
 
 	// マシン休止情報登録
 	Route::resource('machine_downtimes', MachineDowntimeController::class);
-	Route::post('machine_downtimes/confirm', [MachineDowntimeController::class, 'confirm'])->name('machine_downtimes.confirm');
+	Route::get('machine_downtimes/confirm', [MachineDowntimeController::class, 'confirm'])->name('machine_downtimes.confirm');
 
 	// 休止一覧と損失
 	Route::resource('machine_aggregators', MachineAggregatorController::class);
