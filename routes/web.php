@@ -43,6 +43,20 @@ Route::middleware('auth')->group(function () {
 		return redirect()->route('failure-reports.create');
 	})->name('failure-reports.back');
 	
+
+	Route::get('/failure_reports/index', [FailureReportController::class, 'index'])->name('failure_reports.index');
+	Route::get('/failure_reports/create', [FailureReportController::class, 'create'])->name('failure_reports.create');
+	// 入力処理（POST）
+	Route::post('/failure_reports/submit', [FailureReportController::class, 'submit'])->name('failure_reports.submit');
+	// 確認画面（GET）
+	Route::get('/failure_reports/confirm', [FailureReportController::class, 'confirm'])->name('failure_reports.confirm');
+	Route::get('/failure_reports/confirm_update', [FailureReportController::class, 'confirmUpdate'])->name('failure_reports.confirm_update');
+	// 登録処理（POST）
+	Route::post('/failure_reports/store', [FailureReportController::class, 'store'])->name('failure_reports.store');
+	Route::post('/failure_reports/update', [FailureReportController::class, 'update'])->name('failure_reports.update');
+
+
+
 	// 集計
 
 	// 画像アップロード
@@ -65,17 +79,10 @@ Route::middleware('auth')->group(function () {
 	// 店舗・分類など
 	Route::resource('branches', BranchController::class)->only(['create', 'index']);
 
-	Route::get('/failure_reports/create', [FailureReportController::class, 'create'])->name('failure_reports.create');
-	// 入力処理（POST）
-	Route::post('/failure_reports/submit', [FailureReportController::class, 'submit'])->name('failure_reports.submit');
-	// 確認画面（GET）
-	Route::get('/failure_reports/confirm', [FailureReportController::class, 'confirm'])->name('failure_reports.confirm');
-	// 登録処理（POST）
-	Route::post('/failure_reports/store', [FailureReportController::class, 'store'])->name('failure_reports.store');
-
 	// マシン休止情報登録
 	Route::resource('machine_downtimes', MachineDowntimeController::class);
-	Route::get('machine_downtimes/confirm', [MachineDowntimeController::class, 'confirm'])->name('machine_downtimes.confirm');
+	Route::get('/machine_downtimes/create', [MachineDowntimeController::class, 'create'])->name('machine_downtimes.create');
+	Route::post('/machine_downtimes/confirm', [MachineDowntimeController::class, 'confirm'])->name('machine_downtimes.confirm');
 
 	// 休止一覧と損失
 	Route::resource('machine_aggregators', MachineAggregatorController::class);

@@ -24,21 +24,6 @@ class FailureReportController extends Controller
 	{
 		return view('failure_reports.create');
 	}
-
-	public function submit(Request $request)
-	{
-		/*
-		$validated = $request->validate([
-			'occurred_at' => 'required|date',
-			'occurred_by' => 'required|string',
-			// 他のバリデーション
-		]);
-
-		session(['report_data' => $validated]);
-	*/
-		return redirect()->route('failure_reports.confirm');
-	}
-
 	
 	public function confirm()
 	{
@@ -51,6 +36,19 @@ class FailureReportController extends Controller
 
 		return view('failure_reports.confirm', compact('data'));
 	}
+
+	public function confirmUpdate()
+	{
+
+		$data = session('report_data');
+
+		if (!$data) {
+			return redirect()->route('failure_reports.submit')->with('error', '確認データがありません');
+		}
+
+		return view('failure_reports.confirm-update', compact('data'));
+	}
+
 
 	public function store(Request $request)
 	{
@@ -90,10 +88,34 @@ class FailureReportController extends Controller
 	/**
 	 * Update the specified resource in storage.
 	 */
-	public function update(Request $request, string $id)
-	{
-		//
-	}
+    public function update(Request $request)
+    {
+        // セッションから確認用データを取り出す
+        $data = session('report_data');
+
+        if (!$data) {
+            // セッションが空なら一覧に戻す
+            return redirect()->route('failure_reports.index')
+                             ->with('error', '更新データが見つかりませんでした。');
+        }
+
+        // 既存レコードを更新する場合
+        // 例: hiddenでidを送っているなら $request->input('id') を使う
+        if (isset($data['id'])) {
+            $report = FailureReport::findOrFail($data['id']);
+            $report->update($data);
+        } else {
+            // 新規作成の場合
+            FailureReport::create($data);
+        }
+
+        // セッションをクリア
+        session()->forget('report_data');
+
+        return redirect()->route('failure_reports.index')
+                         ->with('success', '故障報告を保存しました。');
+    }
+
 
 	/**
 	 * Remove the specified resource from storage.

@@ -1,5 +1,6 @@
 <div>
-    <form wire:submit.prevent="confirm" method="POST" wire:key="{{ $machine_code }}" class="space-y-4" id="report-form">
+    <form action="{{ route('machine_downtimes.confirm') }}" method="POST" wire:key="{{ $machine_code }}" class="space-y-4" id="report-form">
+        @csrf
         <div>
             <label for="machine_code" class="block font-medium mb-1">マシンコード</label>
             {{ $machine_code ?? '情報なし' }}
