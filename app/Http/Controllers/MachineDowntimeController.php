@@ -29,7 +29,7 @@ class MachineDowntimeController extends Controller
 		$validated = $request->validate([
 	        'machine_code'   => 'required|string',
 	        'downtime_start' => 'required|date',
-	        'downtime_end'   => 'nullable|date|after_or_equal:downtime_start',
+	        'downtime_end'   => 'nullable|after_or_equal:downtime_start',
 	        'reason'         => 'nullable|string|max:500',
 	    ]);
 		session(['report_data' => $validated]);
