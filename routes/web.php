@@ -83,6 +83,12 @@ Route::middleware('auth')->group(function () {
 	Route::resource('machine_downtimes', MachineDowntimeController::class);
 	Route::get('/machine_downtimes/create', [MachineDowntimeController::class, 'create'])->name('machine_downtimes.create');
 	Route::post('/machine_downtimes/confirm', [MachineDowntimeController::class, 'confirm'])->name('machine_downtimes.confirm');
+	// 編集画面
+	Route::get('/machine_downtimes/{id}/edit', [MachineDowntimeController::class, 'edit'])->name('machine_downtimes.edit');
+	// 確認画面（POST）
+	Route::post('/machine_downtimes/{id}/update_confirm', [MachineDowntimeController::class, 'updateConfirm'])->name('machine_downtimes.update_confirm');
+	// 更新処理（PUT）
+	Route::put('/machine_downtimes/{id}', [MachineDowntimeController::class, 'update'])->name('machine_downtimes.update');
 
 	// 休止一覧と損失
 	Route::resource('machine_aggregators', MachineAggregatorController::class);
