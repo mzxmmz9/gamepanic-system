@@ -65,9 +65,24 @@ class MachineDowntimeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        // バリデーション
+        $validated = $request->validate([
+            'machine_code'    => ['required', 'string', 'max:50'],
+            'downtime_start'  => ['required', 'date'],
+            'downtime_end'    => ['nullable', 'date', 'after_or_equal:downtime_start'], 
+            'reason'          => ['nullable', 'string', 'max:255'],
+        ]);
+
+        // 対象レコード取得
+        $updateRecord = MachineDowntime::findOrFail($id);
+
+        // 更新
+        $updateRecord->update($validated);
+
+        // リダイレクトやレスポンス
+        return redirect()->route('posts.show', $post)->with('success', '更新しました');
     }
 
     /**
