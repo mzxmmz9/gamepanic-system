@@ -48,4 +48,22 @@ class FailureReportFormUpdate extends Component
 	{
 		return view('livewire.failure-report-form-update');
 	}
+
+    public function submit()
+    {
+        $validated = $this->validate([
+            'occurred_at' => 'required|date',
+            'occurred_by' => 'required|string',
+            'process' => 'required|string',
+            'machine_code' => 'required|string',
+            'machine_name' => 'required|string',
+            'st_num' => 'nullable|string',
+            'malfunction' => 'required|string',
+            'note' => 'nullable|string',
+        ]);
+
+        session(['report_data' => $validated]);
+        return redirect()->route('failure_reports.confirm_update');
+    }
+
 }

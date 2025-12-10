@@ -53,7 +53,6 @@ class FailureReportFormCreate extends Component
         ]);
 
         session(['report_data' => $validated]);
-
         return redirect()->route('failure_reports.confirm');
     }
 

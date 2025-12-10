@@ -24,6 +24,7 @@ return new class extends Migration
         }
         if (!Schema::hasTable('machine_downtimes')) {
             Schema::create('machine_downtimes', function (Blueprint $table) {
+                $table->id();
                 $table->string('machine_code');
                 $table->timestamp('downtime_start');
                 $table->timestamp('downtime_end')->nullable();

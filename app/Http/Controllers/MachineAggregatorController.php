@@ -9,15 +9,15 @@ use Illuminate\Http\Request;
 
 class MachineAggregatorController extends Controller
 {
-    public function index(Request $request)
-    {
-        //全店取得
-        $branches = Branch::all();
+	public function index(Request $request)
+	{
+		//全店取得
+		$branches = Branch::all();
 
-        //休止マシン一覧取得
-        $machines = MachineDowntime::all();
+		//休止マシン一覧取得
+		$machines = MachineDowntime::all();
 
-        return view('machine_aggregators.index', compact('branches', 'machines'));
-    }
+		return view('machine_aggregators.index', compact('branches', 'machines'));
+	}
 
 }
