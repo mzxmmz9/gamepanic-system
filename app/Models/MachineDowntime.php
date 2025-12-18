@@ -16,5 +16,4 @@ class MachineDowntime extends Model
         ,'updated_at'
     ];
 
-
 }

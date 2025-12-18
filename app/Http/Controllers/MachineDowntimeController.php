@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\MachineDowntime;
+use Carbon\Carbon;
 
 class MachineDowntimeController extends Controller
 {
@@ -25,12 +26,15 @@ class MachineDowntimeController extends Controller
 		return view('machine_downtimes.create');
 	}
 
+	/**
+	 * マシン休止開始日時を入力した後の確認画面
+	 */
 	public function confirm(Request $request)
 	{
 		$validated = $request->validate([
 			'machine_code'   => 'required|string',
 			'downtime_start' => 'required|date',
-			'downtime_end'   => 'nullable|after_or_equal:downtime_start',
+			'downtime_end'   => 'nullable|date|after_or_equal:downtime_start',
 			'reason'         => 'nullable|string|max:500',
 		]);
 		session(['report_data' => $validated]);
@@ -42,16 +46,20 @@ class MachineDowntimeController extends Controller
 		return view('machine_downtimes.confirm', compact('data'));
 	}
 
+	/**
+	 * マシン休止開始日時登録後、休止一覧画面へ遷移
+	 */
 	public function store(Request $request)
 	{
 		$data = $request->only(['machine_code', 'downtime_start', 'downtime_end', 'reason']);
+
 		MachineDowntime::create($data);
 
 		return redirect()->route('machine_downtimes.index')->with('success', '登録完了しました');
 	}
 
 	/**
-	 * 休止終了日時を記入するマシン を選択する一覧画面
+	 * マシン休止履歴一覧
 	 */
 	public function index()
 	{
@@ -74,17 +82,9 @@ class MachineDowntimeController extends Controller
 			->get();
 		return view('machine_downtimes.index', compact('records'));
 	}
-	
-	/**
-	 * Display the specified resource.
-	 */
-	public function show(string $id)
-	{
-		//
-	}
 
 	/**
-	 * Show the form for editing the specified resource.
+	 * マシン休止終了日を入力する画面
 	 */
 	public function edit($id)
 	{
@@ -113,7 +113,7 @@ class MachineDowntimeController extends Controller
 	}
 
 	/**
-	 * Update the specified resource in storage.
+	 * マシン休止終了を入力した後の確認画面
 	 */
 	public function updateConfirm(Request $request, $id)
 	{
@@ -144,30 +144,21 @@ class MachineDowntimeController extends Controller
 		return view('machine_downtimes.update_confirm', compact('report'));
 	}
 
+	/**
+	 * マシン休止終了日時を登録（レコード更新）
+	 */
 	public function update(Request $request, $id)
 	{
 		$validated = $request->validate([
 			'downtime_end' => 'nullable|date|after_or_equal:downtime_start',
 		]);
 
-		DB::table('machine_downtimes')
-			->where('id', $id)
-			->update([
-				'downtime_end' => $validated['downtime_end'] ?? null,
-				'updated_at'   => now(),
-			]);
+		$downtime = MachineDowntime::findOrFail($id);
+		$downtime->downtime_end = $validated['downtime_end']; // Carbonインスタンス
+		$downtime->save();
 
 		return redirect()->route('machine_aggregators.index')
-						 ->with('success', '休止終了日時を更新しました');
+						->with('success', '休止終了日時を更新しました');
 	}
 
-
-
-	/**
-	 * Remove the specified resource from storage.
-	 */
-	public function destroy(string $id)
-	{
-		//
-	}
 }

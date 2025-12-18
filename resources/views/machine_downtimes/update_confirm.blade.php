@@ -5,21 +5,52 @@
 		</h2>
 	</x-slot>
 
-	<p>ID: {{ $report->id }}</p>
-	<p>店舗: {{ $report->branch_name }}</p>
-	<p>マシンコード: {{ $report->machine_code }}</p>
-	<p>マシン名: {{ $report->machine_name }}</p>
-	<p>休止開始日時: {{ $report->downtime_start }}</p>
-	<p>休止終了日時: {{ $report->downtime_end ?? '未設定' }}</p>
-	<p>休止理由: {{ $report->reason }}</p>
+	<div class="max-w-2xl mx-auto p-6 bg-white shadow-md rounded">
+		<div class="space-y-4">
+			<div>
+				<label class="font-semibold text-gray-700">ID</label>
+				<input type="text" class="input input-bordered w-full" value="{{ $report->id }}" disabled />
+			</div>
+			<div>
+				<label class="font-semibold text-gray-700">店舗</label>
+				<input type="text" class="input input-bordered w-full" value="{{ $report->branch_name }}" disabled />
+			</div>
+			<div>
+				<label class="font-semibold text-gray-700">マシンコード</label>
+				<input type="text" class="input input-bordered w-full" value="{{ $report->machine_code }}" disabled />
+			</div>
+			<div>
+				<label class="font-semibold text-gray-700">マシン名</label>
+				<input type="text" class="input input-bordered w-full" value="{{ $report->machine_name }}" disabled />
+			</div>
+			<div>
+				<label class="font-semibold text-gray-700">休止開始日時</label>
+				<input type="text" class="input input-bordered w-full" value="{{ $report->downtime_start }}" disabled />
+			</div>
+			<div>
+				<label class="font-semibold text-gray-700">休止終了日時</label>
+				<input type="text" class="input input-bordered w-full" value="{{ $report->downtime_end ?? '未設定' }}" disabled />
+			</div>
+			<div>
+				<label class="font-semibold text-gray-700">休止理由</label>
+				<input type="text" class="input input-bordered w-full" value="{{ $report->reason }}" disabled />
+			</div>
+		</div>
 
-	<form action="{{ route('machine_downtimes.update', $report->id) }}" method="POST">
-		@csrf
-		@method('PUT')
-		<input type="hidden" name="downtime_end" value="{{ $report->downtime_end }}">
-		<button type="submit">更新する</button>
-	</form>
+		<div class="mt-8 flex justify-between">
+			<!-- 戻るボタン -->
+			<a href="{{ route('machine_downtimes.edit', $report->id) }}" class="btn btn-secondary">
+				戻る
+			</a>
 
-	<a href="{{ route('machine_downtimes.edit', $report->id) }}">戻る</a>
-
+			<form action="{{ route('machine_downtimes.update', $report->id) }}" method="POST">
+				@csrf
+				@method('PUT')
+				<input type="hidden" name="downtime_end" value="{{ $report->downtime_end }}">
+				<button type="submit" class="btn btn-primary">
+					更新する
+				</button>
+			</form>
+		</div>
+	</div>
 </x-app-layout>
