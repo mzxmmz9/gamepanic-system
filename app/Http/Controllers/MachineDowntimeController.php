@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\MachineDowntime;
+use App\Models\MachineStatus;
 use Carbon\Carbon;
 
 class MachineDowntimeController extends Controller
@@ -153,12 +154,23 @@ class MachineDowntimeController extends Controller
 			'downtime_end' => 'nullable|date|after_or_equal:downtime_start',
 		]);
 
+		// 対象の休止レコードを取得
 		$downtime = MachineDowntime::findOrFail($id);
-		$downtime->downtime_end = $validated['downtime_end']; // Carbonインスタンス
+		$downtime->downtime_end = $validated['downtime_end'];
 		$downtime->save();
 
-		return redirect()->route('machine_aggregators.index')
-						->with('success', '休止終了日時を更新しました');
-	}
+		// 紐づくステータスを更新
+		// machine_code をキーにして Status テーブルを検索
+		$status = MachineStatus::where('machine_code', $downtime->machine_code)->first();
 
+		if ($status) {
+			// 休止終了したので稼働中に戻す
+			$status->id = 1; // (1:稼働)
+			$status->last_updated_at = now(); // 更新日時を記録する場合
+			$status->save();
+		}
+
+		return redirect()->route('machine_aggregators.index')
+						->with('success', '休止終了日時とステータスを更新しました');
+	}
 }
