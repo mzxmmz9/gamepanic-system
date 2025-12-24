@@ -62,8 +62,13 @@ class MachineDowntimeController extends Controller
 	/**
 	 * マシン休止履歴一覧
 	 */
-	public function index()
+	public function index(Request $request)
 	{
+		$branchId = $request->branch_id;
+
+		// 店舗一覧（プルダウン用）
+		$branches = DB::table('branches')->get();
+
 		$records = DB::table('machine_downtimes as downtime')
 			->leftJoin('machine_branches as m_branch', 'downtime.machine_code', '=', 'm_branch.machine_code')
 			->join('branches as branch', 'm_branch.branch_id', '=', 'branch.id')
@@ -77,11 +82,15 @@ class MachineDowntimeController extends Controller
 				'downtime.downtime_end',
 				'downtime.reason'
 			)
+			->when($branchId, function ($query) use ($branchId) {
+				return $query->where('branch.id', $branchId);
+			})
 			->whereNull('downtime.downtime_end')
 			->orderBy('branch.id')
 			->orderBy('downtime.downtime_start', 'desc')
 			->get();
-		return view('machine_downtimes.index', compact('records'));
+
+		return view('machine_downtimes.index', compact('records', 'branches', 'branchId'));
 	}
 
 	/**
