@@ -1,40 +1,40 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+	<x-slot name="header">
+		<h2 class="font-semibold text-xl text-gray-800 leading-tight">
+			{{ __('Dashboard') }}
+		</h2>
+	</x-slot>
 
-    <div class="dashboard max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-12 bg-gray-50">
-        <!-- 投稿アクション -->
-        <section class="actions flex justify-end">
-            <a href="{{ route('posts.create') }}"
-               class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow transition">
-                + 新しい投稿
-            </a>
-        </section>
+	<div class="max-w-4xl min-w-max mx-auto bg-white p-6 rounded-lg shadow-md space-y-6 mt-8">
+		<!-- 投稿アクション -->
+		<section class="actions flex justify-end">
+			<a href="{{ route('posts.create') }}"
+			   class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow transition">
+				+ 新しい投稿
+			</a>
+		</section>
 
-        <!-- 直近の投稿 -->
-        <section class="latest-posts">
-            <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">直近の投稿</h2>
-            <ul class="space-y-4">
-                @forelse ($latestPosts as $post)
-                    <li class="post bg-white border border-gray-200 rounded p-4 shadow-sm hover:shadow-md transition">
-                        <a href="{{ route('posts.show', $post->id) }}" class="text-gray-800 hover:text-blue-600">
-                            <strong class="block text-base font-medium">{{ $post->title }}</strong>
-                            <small class="text-sm text-gray-500">{{ $post->created_at->format('Y-m-d') }}</small>
-                        </a>
-                    </li>
-                @empty
-                    <li class="text-gray-500 italic">まだ投稿がありません。</li>
-                @endforelse
-            </ul>
-        </section>
+		<!-- 直近の投稿 -->
+		<section class="latest-posts">
+			<h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">直近の投稿</h2>
+			<ul class="space-y-4">
+				@forelse ($latestPosts as $post)
+					<li class="post bg-white border border-gray-200 rounded p-4 shadow-sm hover:shadow-md transition">
+						<a href="{{ route('posts.show', $post->id) }}" class="text-gray-800 hover:text-blue-600">
+							<strong class="block text-base font-medium">{{ $post->title }}</strong>
+							<small class="text-sm text-gray-500">{{ $post->created_at->format('Y-m-d') }}</small>
+						</a>
+					</li>
+				@empty
+					<li class="text-gray-500 italic">まだ投稿がありません。</li>
+				@endforelse
+			</ul>
+		</section>
 
-        <!-- 自店舗のアクティビティ -->
-        <section class="store-activity">
-            <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">自店舗のアクティビティ</h2>
-            <div class="text-gray-500 italic">現在、アクティビティ情報はありません。</div>
-        </section>
-    </div>
+		<!-- 自店舗のアクティビティ -->
+		<section class="store-activity">
+			<h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">自店舗のアクティビティ</h2>
+			<div class="text-gray-500 italic">現在、アクティビティ情報はありません。</div>
+		</section>
+	</div>
 </x-app-layout>

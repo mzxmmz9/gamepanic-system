@@ -1,4 +1,4 @@
-import './bootstrap';
+//import './bootstrap';
 
 import './bookmark-toggle';
 import './image-temp-upload';
