@@ -11,16 +11,29 @@ class PostController extends Controller
 {
 	use AuthorizesRequests;
 
-	//一覧
-	public function index()
+	// 一覧
+	public function index(Request $request)
 	{
-		$posts = Post::latest()->paginate(10);
+		// 検索ワード取得
+		$keyword = $request->input('keyword');
 
+		// 投稿取得（検索条件を追加）
+		$posts = Post::query()
+			->when($keyword, function ($query, $keyword) {
+				$query->where(function ($q) use ($keyword) {
+					$q->where('title', 'like', "%{$keyword}%")
+					  ->orWhere('content', 'like', "%{$keyword}%");
+				});
+			})
+			->latest()
+			->paginate(10);
+
+		// ブックマーク済みID
 		$bookmarkedIds = auth()->check()
 			? auth()->user()->bookmarks()->pluck('post_id')->toArray()
 			: [];
 
-		return view('posts.index', compact('posts', 'bookmarkedIds'));
+		return view('posts.index', compact('posts', 'bookmarkedIds', 'keyword'));
 	}
 
 	//詳細表示

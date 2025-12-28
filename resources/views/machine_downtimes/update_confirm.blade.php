@@ -5,7 +5,11 @@
 		</h2>
 	</x-slot>
 
-	<div class="max-w-2xl mx-auto p-6 bg-white shadow-md rounded">
+	<div class="
+		max-w-4xl min-w-max 
+		w-[100%] sm:w-[100%] md:w-[70%] lg:w-[60%] xl:w-[50%]
+		 mx-auto bg-white p-6 rounded-lg shadow-md space-y-6 mt-8
+	">
 		<div class="space-y-4">
 			<div>
 				<label class="font-semibold text-gray-700">ID</label>
