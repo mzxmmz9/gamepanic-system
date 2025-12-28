@@ -3,7 +3,7 @@
 		<h2 class="text-xl font-bold text-gray-800">店舗別マシン集計一覧</h2>
 	</x-slot>
 	<div class="
-		max-w-4xl min-w-max 
+		max-w-4xl 
 		mx-auto bg-white p-6 rounded-lg shadow-md space-y-6 mt-8
 	">
 

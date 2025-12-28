@@ -25,12 +25,26 @@
 			<h2 class="text-2xl font-bold text-slate-800">{{ $post->title }}</h2>
 			<p class="text-sm text-slate-600">投稿者: {{ $post->user->name }}</p>
 
-			@foreach ($post->images as $image)
-				<img src="{{ $image->path }}" alt="投稿画像"
-					 class="mt-2 rounded-md border border-slate-200 max-w-full">
-			@endforeach
-
 			<p class="text-slate-700 whitespace-pre-line">{{ $post->content }}</p>
+
+			@foreach ($post->images as $image)
+				<div x-data="{ open: false }" class="inline-block">
+					<!-- サムネイル -->
+					<img src="{{ asset('storage/' . $image->path) }}"
+						alt="投稿画像"
+						@click="open = true"
+						class="mt-2 rounded-md border border-slate-200 w-32 h-32 object-cover cursor-pointer hover:opacity-80 transition">
+
+					<!-- 拡大表示モーダル -->
+					<div x-show="open"
+						x-transition
+						@click="open = false"
+						class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+						<img src="{{ asset('storage/' . $image->path) }}"
+							class="max-w-full max-h-full rounded shadow-lg">
+					</div>
+				</div>
+			@endforeach
 			<small class="text-sm text-slate-500">投稿日: {{ $post->created_at->format('Y-m-d H:i') }}</small>
 
 			<div class="flex flex-wrap gap-2 mt-4">
@@ -90,8 +104,22 @@
 				<li class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm space-y-3">
 
 					@foreach ($answer->images as $image)
-						<img src="{{ $image->path }}" alt="画像"
-							 class="rounded-md border border-slate-200 max-w-full">
+						<div x-data="{ open: false }" class="inline-block">
+							<!-- サムネイル -->
+							<img src="{{ $image->path }}" 
+								alt="画像"
+								@click="open = true"
+								class="rounded-md border border-slate-200 w-32 h-32 object-cover cursor-pointer hover:opacity-80 transition">
+
+							<!-- 拡大表示モーダル -->
+							<div x-show="open"
+								x-transition
+								@click="open = false"
+								class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+								<img src="{{ $image->path }}" 
+									class="max-w-full max-h-full rounded shadow-lg">
+							</div>
+						</div>
 					@endforeach
 
 					<p class="text-slate-700">{{ $answer->comment }}</p>
@@ -156,24 +184,21 @@
 		@auth
 			<div class="mt-8 bg-white border border-slate-200 rounded-lg p-6 shadow-sm space-y-4">
 				<h4 class="text-lg font-semibold text-slate-800">回答する</h4>
-				<!-- 画像選択 -->
-				<form method="POST" action="/images/temp" enctype="multipart/form-data">
+				<form method="POST" action="{{ route('answers.confirm') }}" enctype="multipart/form-data" class="space-y-4">
 					@csrf
-					<input type="file" name="image" id="imageInput" multiple
-						   class="block w-full text-sm text-slate-700">
-				</form>
-				<!-- テキスト入力 -->
-				<form method="POST" action="{{ route('answers.confirm') }}" class="space-y-3">
-					@csrf
+
 					<input type="hidden" name="post_id" value="{{ $post->id }}">
 
+					<!-- 画像アップロード -->
+					<input type="file" name="images[]" multiple class="block w-full text-sm text-slate-700">
+
+					<!-- テキスト -->
 					<textarea name="content" rows="4"
 						class="w-full border border-slate-300 rounded px-4 py-2 text-sm
-							   focus:outline-none focus:ring-2 focus:ring-indigo-500"
+							focus:outline-none focus:ring-2 focus:ring-indigo-500"
 						placeholder="回答内容を入力してください">{{ old('content') }}</textarea>
 
-					<button type="submit"
-							class="btn btn-secondary">
+					<button type="submit" class="btn btn-secondary">
 						確認画面へ
 					</button>
 				</form>

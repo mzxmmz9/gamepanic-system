@@ -55,8 +55,6 @@ Route::middleware('auth')->group(function () {
 	Route::post('/failure_reports/store', [FailureReportController::class, 'store'])->name('failure_reports.store');
 	Route::post('/failure_reports/update', [FailureReportController::class, 'update'])->name('failure_reports.update');
 
-
-
 	// 集計
 
 	// 画像アップロード
@@ -64,6 +62,7 @@ Route::middleware('auth')->group(function () {
 
 	// 投稿・回答管理
 	Route::resource('posts', PostController::class);
+	Route::post('/posts/confirm', [PostController::class, 'confirm'])->name('posts.confirm');
 	Route::post('/answers/{answer}/best', [AnswerController::class, 'markBest'])->name('answers.best');
 	Route::post('/answers/confirm', [AnswerController::class, 'confirm'])->name('answers.confirm');
 	Route::post('/answers/back', [AnswerController::class, 'back'])->name('answers.back');

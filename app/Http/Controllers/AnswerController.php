@@ -8,35 +8,54 @@ use App\Notifications\BestAnswerChosen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Services\ImageService;
 
 class AnswerController extends Controller
 {
 	use AuthorizesRequests;
 
-	public function confirm(Request $request)
+	public function confirm(Request $request, ImageService $imageService)
 	{
 		$request->validate([
 			'post_id' => 'required|exists:posts,id',
 			'content' => 'required|string',
-			'images.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048', // 各ファイルの型＆サイズ制限（2MB）
+			'images.*' => 'nullable|image',
 		]);
 
-		$post = Post::findOrFail($request->input('post_id'));
-		$content = $request->input('content');
 		$pendingImages = session('pending_images', []);
 
-		return view('answers.confirm', compact('post', 'content', 'pendingImages'));
+		if ($request->hasFile('images')) {
+			foreach ($request->file('images') as $file) {
+				$pendingImages[] = $imageService->saveTemp($file);
+			}
+			session(['pending_images' => $pendingImages]);
+		}
+
+		return view('answers.confirm', [
+			'post' => Post::find($request->post_id),
+			'content' => $request->content,
+			'temp_images' => $pendingImages,
+		]);
 	}
 
 	public function back(Request $request)
 	{
+		// 入力内容を復元
 		session()->flashInput($request->only('content'));
+
+		// 確認画面から戻ったフラグ
 		session()->put('_from_confirm', true);
+
+		// 画像も復元（hidden で送られてきた temp_images[]）
+		if ($request->has('temp_images')) {
+			session()->put('pending_images', $request->temp_images);
+		}
 
 		return redirect()->route('posts.show', $request->input('post_id'));
 	}
 
-	public function store(Request $request)
+	
+	public function store(Request $request, ImageService $imageService)
 	{
 		$answer = Answer::create([
 			'post_id' => $request->post_id,
@@ -44,16 +63,16 @@ class AnswerController extends Controller
 			'comment' => $request->content,
 		]);
 
-		foreach (session()->pull('pending_images', []) as $filename) {
-			$storagePath = "images/{$filename}"; // ファイル保存先
-			$urlPath = "images/{$filename}"; // 表示用URL
+		foreach (session()->pull('pending_images', []) as $tempPath) {
+			$newPath = $imageService->moveToPermanent($tempPath);
 
-			Storage::disk('public')->move("temp-images/{$filename}", $storagePath);
 			$answer->images()->create([
-				'path' => Storage::url($urlPath),
+				'path' => Storage::url($newPath),
 			]);
 		}
-		return redirect()->route('posts.show', $request->input('post_id'))->with('success', '回答を投稿しました');
+
+		return redirect()->route('posts.show', $request->post_id)
+			->with('success', '回答を投稿しました');
 	}
 
 	public function markBest(Answer $answer)

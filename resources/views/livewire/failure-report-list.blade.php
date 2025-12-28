@@ -8,7 +8,10 @@
 				class="p-2 odd:bg-gray-100 even:bg-white" 
 				style="cursor:pointer;"
 			>
-				<span>{{ $report->machine_code }}</span><span>{{ $report->machine_name }}</span>
+				<span>{{ $report->branch_id }}</span>
+				<span>{{ $report->machine_code }}</span>
+				<span>{{ $report->machine_name }}</span>
+				<span>ST:{{ $report->st_num }}</span>
 			</li>
 			@endforeach
 		</ul>
