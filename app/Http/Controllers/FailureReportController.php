@@ -5,16 +5,37 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\FailureReport;
+use App\Models\Branch;
 
 class FailureReportController extends Controller
 {
 	/**
 	 * Display a listing of the resource.
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-		$reports = FailureReport::whereNull('resumed_at')->get();
-		return view('failure_reports.index', compact('reports'));
+		// 店一覧
+		$branches = Branch::orderBy('name')->get();
+
+		// 選択された店舗ID（未選択なら null）
+		$selectedBranch = $request->branch_id;
+
+		// レポート取得（店別フィルタ対応）
+		$query = FailureReport::whereNull('resumed_at');
+
+		if (!empty($selectedBranch)) {
+			$query->where('branch_id', $selectedBranch);
+		}
+
+		$reports = $query->get();
+
+		// 各 report に branch_name を付与
+		$reports->map(function ($report) {
+			$report->branch_name = Branch::find($report->branch_id)?->name;
+			return $report;
+		});
+
+		return view('failure_reports.index', compact('reports', 'branches', 'selectedBranch'));
 	}
 
 	/**
@@ -80,33 +101,33 @@ class FailureReportController extends Controller
 	/**
 	 * Update the specified resource in storage.
 	 */
-    public function update(Request $request)
-    {
-        // セッションから確認用データを取り出す
-        $data = session('report_data');
+	public function update(Request $request)
+	{
+		// セッションから確認用データを取り出す
+		$data = session('report_data');
 
-        if (!$data) {
-            // セッションが空なら一覧に戻す
-            return redirect()->route('failure_reports.index')
-                             ->with('error', '更新データが見つかりませんでした。');
-        }
+		if (!$data) {
+			// セッションが空なら一覧に戻す
+			return redirect()->route('failure_reports.index')
+							 ->with('error', '更新データが見つかりませんでした。');
+		}
 
-        // 既存レコードを更新する場合
-        // 例: hiddenでidを送っているなら $request->input('id') を使う
-        if (isset($data['id'])) {
-            $report = FailureReport::findOrFail($data['id']);
-            $report->update($data);
-        } else {
-            // 新規作成の場合
-            FailureReport::create($data);
-        }
+		// 既存レコードを更新する場合
+		// 例: hiddenでidを送っているなら $request->input('id') を使う
+		if (isset($data['id'])) {
+			$report = FailureReport::findOrFail($data['id']);
+			$report->update($data);
+		} else {
+			// 新規作成の場合
+			FailureReport::create($data);
+		}
 
-        // セッションをクリア
-        session()->forget('report_data');
+		// セッションをクリア
+		session()->forget('report_data');
 
-        return redirect()->route('failure_reports.index')
-                         ->with('success', '故障報告を保存しました。');
-    }
+		return redirect()->route('failure_reports.index')
+						 ->with('success', '故障報告を保存しました。');
+	}
 
 
 	/**

@@ -16,7 +16,7 @@
 		<div><label class="inline-block w-24 mr-4">ST番号</label><input type="text" wire:model="st_num" value="{{ $st_num }}" placeholder="ST番号"></div>
 		<div><label class="inline-block w-24 mr-4">故障内容</label><textarea wire:model="malfunction" value="{{ $malfunction }}" placeholder="故障内容"></textarea></div>
 		<div><label class="inline-block w-24 mr-4">備考</label><textarea wire:model="note" value="{{ $note }}" placeholder="備考"></textarea></div>
-
+		<input type="hidden" wire:model="branch_id" value="{{ $branch_id }}">
 		<button type="submit">内容を確認する</button>
 	</form>
 </div>

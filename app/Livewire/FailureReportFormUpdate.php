@@ -8,7 +8,7 @@ use Livewire\Attributes\On;
 class FailureReportFormUpdate extends Component
 {
 	public $id;
-	public $branch;
+	public $branch_id;
 	public $machine_code, $machine_name;
 	public $occurred_at, $occurred_by;
 	public $process;
@@ -52,6 +52,7 @@ class FailureReportFormUpdate extends Component
     public function submit()
     {
         $validated = $this->validate([
+        	'branch_id' => 'required|string',
             'occurred_at' => 'required|date',
             'occurred_by' => 'required|string',
             'process' => 'required|string',

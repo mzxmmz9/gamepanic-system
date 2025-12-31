@@ -37,8 +37,8 @@
 					<tr>
 						<td class="border px-4 py-2">{{ $machine->branch_name }}</td>
 						<td class="border px-4 py-2">{{ $machine->machine_name }}</td>
-						<td class="border px-4 py-2">{{ $machine->downtime_start }}</td>
-						<td class="border px-4 py-2">{{ $machine->downtime_end }}</td>
+						<td class="border px-4 py-2">{{ \Carbon\Carbon::parse( $machine->downtime_start )->format('Y年m月d日 H:i') }}</td>
+						<td class="border px-4 py-2">{{ $machine->downtime_end ? \Carbon\Carbon::parse($machine->downtime_end)->format('Y年m月d日 H:i') : '' }}</td>
 						<td class="border px-4 py-2">{{ $machine->downtime_diff ?? '-' }}</td>
 						<td class="border px-4 py-2">{{ number_format($machine->loss_amount) }} 円</td>
 					</tr>

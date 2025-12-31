@@ -11,7 +11,7 @@ use App\Models\FailureReport;
 class FailureReportFormCreate extends Component
 {
 	public $id;
-	public $branch;
+	public $branch_id;
 	public $machine_code, $machine_name;
 	public $occurred_at, $occurred_by;
 	public $process;
@@ -30,7 +30,7 @@ class FailureReportFormCreate extends Component
 	{
 		$code = $selectedMachineCode;
 		$this->machine_code = $code;
-		$this->branch = MachineBranch::find($code)?->branch_id;
+		$this->branch_id = MachineBranch::find($code)?->branch_id;
 		$this->machine_name = Machine::find($code)?->name;
 
 		$unresolvedReport = FailureReport::where('machine_code', $code)
@@ -39,22 +39,24 @@ class FailureReportFormCreate extends Component
 			->first();
 	}
 
-    public function submit()
-    {
-        $validated = $this->validate([
-            'occurred_at' => 'required|date',
-            'occurred_by' => 'required|string',
-            'process' => 'required|string',
-            'machine_code' => 'required|string',
-            'machine_name' => 'required|string',
-            'st_num' => 'nullable|string',
-            'malfunction' => 'required|string',
-            'note' => 'nullable|string',
-        ]);
+	public function submit()
+	{
 
-        session(['report_data' => $validated]);
-        return redirect()->route('failure_reports.confirm');
-    }
+		$validated = $this->validate([
+			'branch_id' => 'required',
+			'occurred_at' => 'required|date',
+			'occurred_by' => 'required|string',
+			'process' => 'required|string',
+			'machine_code' => 'required|string',
+			'machine_name' => 'required|string',
+			'st_num' => 'nullable|string',
+			'malfunction' => 'required|string',
+			'note' => 'nullable|string',
+		]);
+
+		session(['report_data' => $validated]);
+		return redirect()->route('failure_reports.confirm');
+	}
 
 
 

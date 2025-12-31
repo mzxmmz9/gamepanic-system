@@ -40,6 +40,7 @@ class MachineDowntimeController extends Controller
 		]);
 		session(['report_data' => $validated]);
 		$data = session('report_data');
+		
 		if (!$data) {
 			return redirect()->route('machine_downtimes.create')->with('error', '確認データがありません');
 		}
@@ -174,8 +175,8 @@ class MachineDowntimeController extends Controller
 
 		if ($status) {
 			// 休止終了したので稼働中に戻す
-			$status->id = 1; // (1:稼働)
-			$status->last_updated_at = now(); // 更新日時を記録する場合
+			$status->status_id = 1; // (1:稼働)
+			$status->updated_at = now(); // 更新日時を記録する場合
 			$status->save();
 		}
 

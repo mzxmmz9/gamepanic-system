@@ -10,6 +10,16 @@ class FailureReportDetail extends Component
 	public $showReportsId;
 	public array $selectedReport = [];
 
+	public $selectedMachineCode;
+
+	public function selectMachine($machineCode)
+	{
+	    $this->selectedMachineCode = $machineCode;
+
+	    // 必要ならイベント発火もできる
+	    // $this->dispatch('machine-selected', machineCode: $machineCode);
+	}
+
 	#[On('reportDetail-ShowReport')]
 	public function handleShowReport($reportJson): void
 	{

@@ -9,6 +9,10 @@ class MachineStatus extends Model
 {
     use HasFactory;
     protected $table = 'machine_statuses';
+    protected $primaryKey = 'machine_code';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
 
     // 更新可能なカラムを指定
     protected $fillable = [
