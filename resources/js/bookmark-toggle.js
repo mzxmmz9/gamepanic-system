@@ -16,7 +16,7 @@ document.querySelectorAll('.bookmark-toggle').forEach(button => {
 
 		if (response.ok) {
 			clicked.dataset.bookmarked = (!isBookmarked).toString();
-			clicked.textContent = !isBookmarked ? '🔖 ブックマーク解除' : '📌 ブックマーク';
+			clicked.textContent = !isBookmarked ? 'ブックマーク解除' : 'ブックマーク';
 		} else {
 			alert('通信エラーが発生しました');
 		}

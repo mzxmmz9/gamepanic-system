@@ -1,6 +1,8 @@
 <x-app-layout>
 	<x-slot name="header">
-		<h2 class="text-xl font-bold text-gray-800">新規マシン故障発生書</h2>
+		<h2 class="text-xl font-bold text-gray-800">
+		{{ __('新規マシン故障発生書') }}
+		</h2>
 	</x-slot>
 	<div class="
 		max-w-4xl min-w-max 

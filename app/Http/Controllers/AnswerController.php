@@ -18,7 +18,7 @@ class AnswerController extends Controller
 	{
 		$request->validate([
 			'post_id' => 'required|exists:posts,id',
-			'content' => 'required|string',
+			'content' => 'required|string|max:1500',
 			'images.*' => 'nullable|image',
 		]);
 

@@ -8,17 +8,40 @@
 	">
 
 		<!-- 店舗選択フォーム -->
-		<form method="GET" action="{{ route('machine_aggregators.index') }}" class="mb-4">
-			<label for="branch_id" class="mr-2">店舗選択:</label>
-			<select name="branch_id" id="branch_id" onchange="this.form.submit()" class="border rounded px-2 py-1">
-				<option value="">全店舗</option>
-				@foreach($branches as $branch)
-					<option value="{{ $branch->id }}" {{ $branchId == $branch->id ? 'selected' : '' }}>
-						{{ $branch->name }}
-					</option>
-				@endforeach
-			</select>
+		<form method="GET" action="{{ route('machine_aggregators.index') }}" class="flex flex-col md:flex-row gap-4">
+			<div>
+				{{-- 店舗プルダウン --}}
+				<select name="branch_id" class="border p-2">
+					<option value="">全店舗</option>
+					@foreach ($branches as $branch)
+						<option value="{{ $branch->id }}" {{ $branchId == $branch->id ? 'selected' : '' }}>
+							{{ $branch->name }}
+						</option>
+					@endforeach
+				</select>
+			</div>
+			<div>
+				<span>休止開始期間</span>
+				{{-- 期間 From --}}
+				<input type="date" name="from" value="{{ $from }}" class="border p-2">
+				<span>～</span>
+				{{-- 期間 To --}}
+				<input type="date" name="to" value="{{ $to }}" class="border p-2">
+			</div>
+			<button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">検索</button>
 		</form>
+
+		<div>
+			{{-- Excel出力ボタン --}}
+			<a href="{{ route('export.machine', [
+				'branch_id' => $branchId,
+				'from'      => $from,
+				'to'        => $to,
+			]) }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+				Excel出力
+			</a>
+		</div>
+
 
 		<!-- テーブル -->
 		<table class="table-auto border-collapse border w-full">
@@ -46,9 +69,5 @@
 			</tbody>
 		</table>
 
-		<!-- ページネーション -->
-		<div class="mt-4">
-			{{ $machines->appends(['branch_id' => $branchId])->links() }}
-		</div>
 	</div>
 </x-app-layout>

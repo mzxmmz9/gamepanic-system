@@ -7,17 +7,33 @@ use App\Models\Branch;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
+use App\Exports\MachineAggregatorExport;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
 class MachineAggregatorController extends Controller
 {
 
 	public function index(Request $request)
 	{
-		$branchId = $request->input('branch_id'); // プルダウンで選択された店舗ID
+		$branchId = $request->input('branch_id');// 抽出する店舗
+		$from     = $request->input('from');	// 抽出開始日
+		$to       = $request->input('to');		// 抽出終了日
 
 		$query = ViewMachineAggregator::query();
 
+		// 店舗プルダウン
 		if ($branchId) {
 			$query->where('branch_id', $branchId);
+		}
+
+		// 期間フィルター（downtime_start 基準）
+		if ($from) {
+			$query->where('downtime_start', '>=', $from . ' 00:00:00');
+		}
+
+		if ($to) {
+			$query->where('downtime_start', '<=', $to . ' 23:59:59');
 		}
 
 		$machines = $query->paginate(50);
@@ -55,7 +71,59 @@ class MachineAggregatorController extends Controller
 			$machine->loss_amount = (int) round($lossHours * 1000);
 		}
 
-		return view('machine_aggregators.index', compact('machines', 'branches', 'branchId'));
+		return view('machine_aggregators.index', compact('machines', 'branches', 'branchId', 'from', 'to'));
 	}
+
+	// Excel出力
+	public function export(Request $request)
+	{
+		$branchId = $request->input('branch_id');
+		$from     = $request->input('from');
+		$to       = $request->input('to');
+
+		$query = DB::table('view_machine_aggregator');
+		// 店舗フィルタ
+		if ($branchId) {
+			$query->where('branch_id', $branchId);
+		}
+		// フィルタ開始日
+		if ($from) {
+			$query->where('downtime_start', '>=', $from . ' 00:00:00');
+		}
+		// フィルタ終了日
+		if ($to) {
+			$query->where('downtime_start', '<=', $to . ' 23:59:59');
+		}
+
+		// SQL 実行
+		$collection = $query->get();
+		// 各行を配列に変換
+		$arrayRows = $collection->map(function ($row) {
+			return (array) $row;
+		});
+		// コレクション → 配列
+		$rows = $arrayRows->toArray();
+
+		// exportクラス
+		$export = new MachineAggregatorExport($rows);
+		$writer = $export->writer();
+
+		// Excel をブラウザに直接ストリーム出力するレスポンス
+		return new StreamedResponse(
+			// ブラウザへ Excel を直接書き込む処理
+			function () use ($writer) {
+				$writer->save('php://output');  // 一時ファイルを作らず直接送信
+			},
+			// HTTP ステータスコード
+			200,
+			// ダウンロード用ヘッダー
+			[
+				'Content-Type'        => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+				'Content-Disposition' => 'attachment; filename="machine_aggregator.xlsx"',
+			]
+		);
+
+	}
+
 
 }

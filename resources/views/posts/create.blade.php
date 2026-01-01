@@ -5,30 +5,53 @@
 		</h2>
 	</x-slot>
 
-	<div class="max-w-4xl min-w-max mx-auto bg-white p-6 rounded-lg shadow-md space-y-6 mt-8">
+	<div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow border space-y-6 mt-8">
+
 		<h3 class="text-2xl font-bold text-slate-700 flex items-center gap-2">
 			<span>新しい投稿</span>
 		</h3>
 
 		<form method="POST" action="{{ route('posts.confirm') }}" enctype="multipart/form-data" class="space-y-6">
 			@csrf
+
 			<!-- タイトル -->
 			<div>
 				<label for="title" class="block text-sm font-medium text-slate-700 mb-1">タイトル</label>
 				<input type="text" name="title" id="title"
 					   value="{{ old('title') }}"
 					   required
-					   class="w-full border border-slate-300 rounded-md shadow-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+					   class="w-full border border-slate-300 rounded-md shadow-sm px-4 py-2
+							  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
 			</div>
-			
+
 			<!-- 画像アップロード -->
-			<input type="file" name="images[]" multiple class="block w-full text-sm text-slate-700">
-			
+			<div>
+				<label class="block text-sm font-medium text-slate-700 mb-1">画像アップロード</label>
+				<input type="file" name="images[]" multiple class="block w-full text-sm text-slate-700">
+			</div>
+
+			<!-- 戻り時の一時画像表示 -->
+			@if (session('pending_images'))
+				<div class="space-y-2">
+					<p class="text-sm text-slate-600">前回アップロードした画像</p>
+					<div class="flex flex-wrap gap-4">
+						@foreach (session('pending_images') as $img)
+							<img src="{{ asset('storage/' . $img) }}"
+								 class="w-32 h-32 object-cover rounded border">
+
+							<!-- hidden で保持 -->
+							<input type="hidden" name="temp_images[]" value="{{ $img }}">
+						@endforeach
+					</div>
+				</div>
+			@endif
+
 			<!-- 本文 -->
 			<div>
 				<label for="content" class="block text-sm font-medium text-slate-700 mb-1">本文</label>
 				<textarea name="content" id="content" rows="6" required
-						  class="w-full border border-slate-300 rounded-md shadow-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition resize-y">{{ old('content') }}</textarea>
+						  class="w-full border border-slate-300 rounded-md shadow-sm px-4 py-2
+								 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition resize-y">{{ old('content') }}</textarea>
 			</div>
 
 			<!-- 送信ボタン -->
@@ -38,6 +61,7 @@
 					投稿する
 				</button>
 			</div>
+
 		</form>
 
 	</div>

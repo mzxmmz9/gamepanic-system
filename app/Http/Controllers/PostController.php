@@ -63,6 +63,9 @@ class PostController extends Controller
 	//投稿フォーム
 	public function create()
 	{
+		session()->forget('pending_images');
+		session()->forget('_from_confirm');
+
 		return view('posts.create');
 	}
 
@@ -73,25 +76,51 @@ class PostController extends Controller
 		$validated = $request->validate([
 			'title'   => 'required|string|max:255',
 			'content' => 'required|string',
-			'images.*' => 'nullable|image|max:5120', // 5MB
+			'images.*' => 'nullable|image|max:5120',
 		]);
 
-		// 画像を temp に保存して session に保持
-		$tempImages = session('post_temp_images', []);
+		// まずは空の配列（戻る時は hidden から来る）
+		$tempImages = $request->input('temp_images', []);
 
+		// 新規アップロードがあれば temp に保存
 		if ($request->hasFile('images')) {
 			foreach ($request->file('images') as $file) {
 				$tempImages[] = $imageService->saveTemp($file);
 			}
-			session(['post_temp_images' => $tempImages]);
 		}
 
-		// confirm.blade.php に渡す
+		// セッションに保存（上書き）
+		session(['post_temp_images' => $tempImages]);
+
 		return view('posts.confirm', [
 			'title'       => $validated['title'],
 			'content'     => $validated['content'],
 			'temp_images' => $tempImages,
 		]);
+	}
+
+	public function back(Request $request)
+	{
+		// 入力内容を復元
+		session()->flashInput($request->only(['title', 'content']));
+
+		// 確認画面から戻ったフラグ
+		session()->put('_from_confirm', true);
+
+		// 画像も復元（重複を防ぐ）
+		if ($request->has('temp_images')) {
+
+			// 既存の pending_images を取得
+			$existing = session('pending_images', []);
+
+			// 新しい画像とマージ（重複削除）
+			$merged = array_unique(array_merge($existing, $request->temp_images));
+
+			// セッションに保存
+			session()->put('pending_images', $merged);
+		}
+
+		return redirect()->route('posts.create');
 	}
 
 	//投稿実行

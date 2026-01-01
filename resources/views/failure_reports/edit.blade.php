@@ -1,6 +1,8 @@
 <x-app-layout>
 	<x-slot name="header">
-		<h2 class="text-xl font-bold text-gray-800">報告書選択</h2>
+		<h2 class="text-xl font-bold text-gray-800">
+		{{ __('マシン稼働状況更新') }}
+		</h2>
 	</x-slot>
 	<p>稼働日を入力する報告書を選択してください</p>
 

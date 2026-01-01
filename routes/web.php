@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
 	// 投稿・回答管理
 	Route::resource('posts', PostController::class);
 	Route::post('/posts/confirm', [PostController::class, 'confirm'])->name('posts.confirm');
+	Route::post('/posts/back', [PostController::class, 'back'])->name('posts.back');
 	Route::post('/answers/{answer}/best', [AnswerController::class, 'markBest'])->name('answers.best');
 	Route::post('/answers/confirm', [AnswerController::class, 'confirm'])->name('answers.confirm');
 	Route::post('/answers/back', [AnswerController::class, 'back'])->name('answers.back');
@@ -91,6 +92,9 @@ Route::middleware('auth')->group(function () {
 
 	// 休止一覧と損失
 	Route::resource('machine_aggregators', MachineAggregatorController::class);
+
+	// 損失一覧出力
+	Route::get('/export-machine-aggregator', [MachineAggregatorController::class, 'export'])->name('export.machine');
 });
 
 
