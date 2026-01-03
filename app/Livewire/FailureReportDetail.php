@@ -16,8 +16,6 @@ class FailureReportDetail extends Component
 	{
 	    $this->selectedMachineCode = $machineCode;
 
-	    // 必要ならイベント発火もできる
-	    // $this->dispatch('machine-selected', machineCode: $machineCode);
 	}
 
 	#[On('reportDetail-ShowReport')]

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\MachineDowntime;
 use App\Models\MachineStatus;
+use App\Models\Branch;
 use Carbon\Carbon;
 
 class MachineDowntimeController extends Controller
@@ -65,11 +66,13 @@ class MachineDowntimeController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$branchId = $request->branch_id;
+		// 選択された店舗ID（未選択なら null）
+		$selectedBranch = $request->branch_id;
 
-		// 店舗一覧（プルダウン用）
-		$branches = DB::table('branches')->get();
+		// 店一覧
+		$branches = Branch::orderBy('name')->get();
 
+		// データ取得
 		$records = DB::table('machine_downtimes as downtime')
 			->leftJoin('machine_branches as m_branch', 'downtime.machine_code', '=', 'm_branch.machine_code')
 			->join('branches as branch', 'm_branch.branch_id', '=', 'branch.id')
@@ -83,15 +86,19 @@ class MachineDowntimeController extends Controller
 				'downtime.downtime_end',
 				'downtime.reason'
 			)
-			->when($branchId, function ($query) use ($branchId) {
-				return $query->where('branch.id', $branchId);
+			->when($selectedBranch, function ($query) use ($selectedBranch) {
+				return $query->where('branch.id', $selectedBranch);
 			})
 			->whereNull('downtime.downtime_end')
 			->orderBy('branch.id')
 			->orderBy('downtime.downtime_start', 'desc')
 			->get();
 
-		return view('machine_downtimes.index', compact('records', 'branches', 'branchId'));
+		return view('machine_downtimes.index', compact(
+			'records',
+			'branches',
+			'selectedBranch'
+		));
 	}
 
 	/**

@@ -16,13 +16,6 @@
 				<div><span class="font-semibold">稼働日担当者：</span>{{ $selectedReport['resumed_by'] ?? '情報なし' }}</div>
 				<div class="md:col-span-2"><span class="font-semibold">備考：</span>{{ $selectedReport['note'] ?? '情報なし' }}</div>
 
-				{{-- 
-				<div><span class="font-semibold">休止理由・機械状態①：</span>{{ $selectedReport[''] }}</div>
-				<div><span class="font-semibold">休止理由・機械状態②：</span>{{ $selectedReport[''] }}</div>
-				<div><span class="font-semibold">休止理由・機械状態③：</span>{{ $selectedReport[''] }}</div>
-				<div><span class="font-semibold">休止理由・機械状態④：</span>{{ $selectedReport[''] }}</div>
-				<div><span class="font-semibold">休止理由・機械状態⑤：</span>{{ $selectedReport[''] }}</div>
-				--}}
 			</div>
 
 			{{-- 選択マシン情報end --}}
@@ -42,7 +35,4 @@
 		@endif
 	</div>
 
-	{{-- 
-		ここに他の要素が入る可能性あり
-	--}}
 </div>
