@@ -37,7 +37,7 @@ class MachineDowntimeController extends Controller
 			'machine_code'   => 'required|string',
 			'downtime_start' => 'required|date',
 			'downtime_end'   => 'nullable|date|after_or_equal:downtime_start',
-			'reason'         => 'nullable|string|max:500',
+			'reason'         => 'nullable|string|max:1000',
 		]);
 		session(['report_data' => $validated]);
 		$data = session('report_data');

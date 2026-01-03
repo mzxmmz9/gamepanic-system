@@ -31,14 +31,14 @@
 
 			<hr class="my-6 border-t border-dashed border-gray-300">
 
-			{{-- フォームへ値を渡すボタン --}}
+			{{-- ボタン --}}
 			<div x-data class="text-right">
 				<x-button
-					wire:click="$dispatch('downtimeForm-updateRef', { reportJson: @js($selectedDowntime) })"
+					wire:click="$dispatch('downtimeForm-updateRef', { reportJson: {{ json_encode($selectedDowntime) }} })"
 					wire:key="{{ $selectedDowntime['id'] }}"
 					label="この休止情報を編集する"
 					variant="secondary"
-					x-on:click="document.getElementById('downtime-form')?.scrollIntoView({ behavior: 'smooth' })"
+					x-on:click="document.getElementById('report-form')?.scrollIntoView({ behavior: 'smooth' })"
 				/>
 			</div>
 

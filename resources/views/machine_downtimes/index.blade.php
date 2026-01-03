@@ -63,6 +63,6 @@
 		</div>
 
 		<livewire:downtime-report-detail />
-		<livewire:downtime-report-form-update />
+		<livewire:downtime-report-form-update  :reportJson="$reportJson ?? ''"/>
 	</div>
 </x-app-layout>

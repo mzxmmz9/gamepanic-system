@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\On;
+use App\Models\MachineDowntime;
 
 class DowntimeReportFormUpdate extends Component
 {
@@ -16,7 +17,6 @@ class DowntimeReportFormUpdate extends Component
 	#[On('downtimeForm-updateRef')]
 	public function reflectUpdateForm($reportJson)
 	{
-		dd($reportJson);
 		$selected = is_object($reportJson)
 			? (array) $reportJson
 			: (is_array($reportJson) ? $reportJson : []);
@@ -26,17 +26,6 @@ class DowntimeReportFormUpdate extends Component
 		$this->downtime_start = $selected['downtime_start'] ?? null;
 		$this->downtime_end   = $selected['downtime_end'] ?? null;
 		$this->reason         = $selected['reason'] ?? null;
-	}
-
-	public function update()
-	{
-		\App\Models\MachineDowntime::where('id', $this->id)->update([
-			'downtime_start' => $this->downtime_start,
-			'downtime_end'   => $this->downtime_end,
-			'reason'         => $this->reason,
-		]);
-
-		session()->flash('success', '休止情報を更新しました。');
 	}
 
 	public function render()
