@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->boolean('is_solved')->default(false)->after('content');
+            $table->boolean('is_solved')->default(false);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('store_id')->nullable();
             $table->timestamps();
