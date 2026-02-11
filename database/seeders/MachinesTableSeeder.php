@@ -12,15 +12,18 @@ class MachinesTableSeeder extends Seeder
 	/**
 	 * Run the database seeds.
 	 */
-
-
 	public function run()
 	{
+		// 空文字 → null 変換関
+		$nullIfEmpty = function ($value) {
+			return $value === '' ? null : $value;
+		};
+
 		$path = database_path('data/machines.csv'); // ファイルのパス
 		$handle = fopen($path, 'r');
 
 		if (!$handle) {
-			logger('⚠️ ファイル読み込み失敗: ' . $path);
+			logger('ファイル読み込み失敗: ' . $path);
 			return;
 		}
 
@@ -48,11 +51,13 @@ class MachinesTableSeeder extends Seeder
 			}
 
 			if (count($row) !== count($header)) {
-				logger('⚠️ カラム数不一致 → ' . json_encode($row));
+				logger('カラム数不一致 → ' . json_encode($row));
 				continue;
 			}
 
 			$data = array_combine($header, $row);
+			// 空文字を null に変換
+       		$data = array_map($nullIfEmpty, $data);
 			DB::table('machines')->insert($data);
 		}
 

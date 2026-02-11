@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             BoardsTableSeeder::class,
             MachinesTableSeeder::class,
-            Machine_BoardTableSeeder::class,
+            Machine_boardTableSeeder::class,
             Machine_downtimeTableSeeder::class,
             Machine_statusTableSeeder::class,
             Machine_categoryTableSeeder::class,

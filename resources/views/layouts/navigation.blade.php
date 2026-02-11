@@ -13,27 +13,27 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('ホーム') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('report.selector')" :active="request()->routeIs('report.selector')">
-                        {{ __('Report') }}
+                        {{ __('マシン故障・休止報告') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
-                        {{ __('Posts') }}
+                        {{ __('トラブル相談・解決フォーラム') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('bookmarks.index')" :active="request()->routeIs('bookmarks.index')">
-                        {{ __('Bookmarks') }}
+                        {{ __('ブックマーク') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('machine_aggregators.index')" :active="request()->routeIs('machine_aggregators.index')">
-                        {{ __('Aggregator') }}
+                        {{ __('集計出力') }}
                     </x-nav-link>
                 </div>
 
@@ -55,9 +55,6 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -89,19 +86,19 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+                {{ __('ホーム') }}
             </x-responsive-nav-link>
              <x-responsive-nav-link :href="route('report.selector')" :active="request()->routeIs('report.selector')">
-                {{ __('Report') }}
+                {{ __('マシン故障・休止報告') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
-                {{ __('Posts') }}
+                {{ __('トラブル相談・解決フォーラム') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('bookmarks.index')" :active="request()->routeIs('bookmarks.index')">
-                {{ __('Bookmarks') }}
+                {{ __('ブックマーク') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('machine_aggregators.index')" :active="request()->routeIs('machine_aggregators.index')">
-                {{ __('Aggregator') }}
+                {{ __('集計出力') }}
             </x-responsive-nav-link>
         </div>
 
@@ -113,9 +110,6 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">

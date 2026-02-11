@@ -11,6 +11,7 @@ return new class extends Migration
      */
 	public function up()
 	{
+		DB::statement("DROP VIEW IF EXISTS view_machine_aggregator");
 		DB::statement("
 			CREATE VIEW view_machine_aggregator AS
 			SELECT

@@ -17,8 +17,8 @@ class DashboardController extends Controller
 		$latestPosts = Post::latest()->limit(5)->get();
 
 		$storeStats = [
-			'answers'	=> Answer::where('store_id', $user->store_id)->count(),
-			'bookmarks'	=> Bookmark::where('store_id', $user->store_id)->count(),
+			'answers'	=> Answer::where('user_id', $user->user_id)->count(),
+			'bookmarks'	=> Bookmark::where('user_id', $user->user_id)->count(),
 		];
 
 		return view('dashboard', compact('latestPosts', 'storeStats'));

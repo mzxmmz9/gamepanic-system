@@ -43,7 +43,7 @@ return new class extends Migration
         if (!Schema::hasTable('machine_statuses')) {
             Schema::create('machine_statuses', function (Blueprint $table) {
                 $table->string('machine_code');
-                $table->foreignId('status_id')->constrained('status');
+                $table->foreignId('status_id')->constrained('statuses');
                 $table->timestamps();
 
                 $table->foreign('machine_code')->references('code')->on('machines');
