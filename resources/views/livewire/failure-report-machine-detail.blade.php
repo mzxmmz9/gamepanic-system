@@ -30,7 +30,9 @@
 					@csrf
 
 					{{-- Livewire の値を hidden で送る --}}
-					<input type="hidden" name="machine_code" value="{{ $selectedMachine['code'] }}">
+					@foreach ($selectedMachine as $key => $value)
+						<input type="hidden" name="machine[{{ $key }}]" value="{{ $value }}">
+					@endforeach
 
 					<button
 						type="submit"

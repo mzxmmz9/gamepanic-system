@@ -51,19 +51,19 @@ class FailureReportController extends Controller
 	 */
 	public function formCreate(Request $request)
 	{
-	    $machineCode = $request->machine_code;
-		return view('failure_reports.form-create', compact('machineCode'));
+
+	    $machine = $request->input('machine'); 
+		return view('failure_reports.form-create', compact('machine'));
 	}
 
-	public function confirm()
+	public function confirm(Request $request)
 	{
-		$data = session('report_data');
+		// POST された全データを取得
+		$data = $request->all();
 
-		if (!$data) {
-			return redirect()->route('failure_reports.create')->with('error', '確認データがありません');
-		}
-
-		return view('failure_reports.confirm', compact('data'));
+		return view('failure_reports.confirm', [
+			'data' => $data,
+		]);
 	}
 
 	public function confirmUpdate()
@@ -81,20 +81,26 @@ class FailureReportController extends Controller
 
 	public function store(Request $request)
 	{
-		$data = session('report_data');
+		// バリデーション
+		$validated = $request->validate([
+			'occurred_at' => 'required|date',
+			'occurred_by' => 'required|string',
+			'process' => 'required|string',
 
-		// null チェック
-		if (!$data) {
-			return redirect()->route('failure_reports.create')->withErrors('報告データ登録エラー。もう一度、登録処理を行ってください。');
-		}
+			'machine_code' => 'required|string',
+			'machine_name' => 'required|string',
 
-		// モデルに保存
-		FailureReport::create($data);
+			'st_num' => 'nullable|string',
+			'malfunction' => 'nullable|string',
+			'note' => 'nullable|string',
 
-		// セッションをクリア
-		session()->forget('report_data');
+		]);
 
-		return redirect()->route('dashboard')->with('success', '報告を登録しました');
+		// DB 保存
+		FailureReport::create($validated);
+
+		return redirect()->route('dashboard')
+			->with('success', '報告を登録しました');
 	}
 
 	/**

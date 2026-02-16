@@ -10,6 +10,14 @@
         @csrf
 
         <div>
+            <label class="inline-block w-24 mr-4">店舗</label>
+            <input type="text"
+                name="blanch_name"
+                value="{{ $machine['branch'] }}"
+                readonly>
+        </div>
+
+        <div>
             <label class="inline-block w-24 mr-4">発生日</label>
             <input type="date"
                 name="occurred_at"
@@ -38,7 +46,7 @@
             <label class="inline-block w-24 mr-4">資産番号</label>
             <input type="text"
                 name="machine_code"
-                value="{{ $machine_code }}"
+                value="{{ $machine['code'] }}"
                 readonly>
         </div>
 
@@ -46,7 +54,7 @@
             <label class="inline-block w-24 mr-4">マシン名</label>
             <input type="text"
                 name="machine_name"
-                value="{{ $machine_name }}"
+                value="{{ $machine['name'] }}"
                 readonly>
         </div>
 
@@ -54,21 +62,21 @@
             <label class="inline-block w-24 mr-4">ST番号</label>
             <input type="text"
                 name="st_num"
-                value="{{ old('st_num', $st_num) }}"
+                value="{{ old('st_num', $st_num ?? '') }}"
                 placeholder="ST番号">
         </div>
 
         <div>
             <label class="inline-block w-24 mr-4">故障内容</label>
-            <textarea name="malfunction" placeholder="故障内容">{{ old('malfunction', $malfunction) }}</textarea>
+            <textarea name="malfunction" placeholder="故障内容">{{ old('malfunction', $malfunction ?? '') }}</textarea>
         </div>
 
         <div>
             <label class="inline-block w-24 mr-4">備考</label>
-            <textarea name="note" placeholder="備考">{{ old('note', $note) }}</textarea>
+            <textarea name="note" placeholder="備考">{{ old('note', $note ?? '') }}</textarea>
         </div>
 
-        <input type="hidden" name="branch_id" value="{{ $branch_id }}">
+        <input type="hidden" name="branch_id" value="{{ $machine['branch'] }}">
 
         <button type="submit">内容を確認する</button>
     </form>

@@ -9,10 +9,6 @@
 		max-w-3xl mx-auto bg-white p-6 mt-8
 		rounded-lg shadow border space-y-6
 	">
-		@php
-			$data = session('report_data');
-		@endphp
-
 		@if ($data)
 
 			<!-- 見出し -->
@@ -69,18 +65,22 @@
 			<div class="pt-6 border-t flex flex-col sm:flex-row gap-3">
 
 				<!-- 戻る -->
-				<a href="{{ route('failure_reports.create') }}"
-				   class="w-full px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition text-center">
-					戻る
-				</a>
+				<form action="{{ route('failure_reports.form-create') }}" method="GET">
+					<button type="submit" 
+						class="w-full px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition text-center">
+						戻る
+					</button>
+				</form>
 
 				<!-- 送信 -->
-				<form action="{{ route('failure_reports.store') }}" method="POST" class="w-full">
+				<form action="{{ route('failure_reports.store') }}" method="POST">
 					@csrf
-					<button type="submit"
-							class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-						送信する
-					</button>
+
+					@foreach ($data as $key => $value)
+						<input type="hidden" name="{{ $key }}" value="{{ $value }}">
+					@endforeach
+
+					<button type="submit">登録する</button>
 				</form>
 
 			</div>
