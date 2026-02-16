@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
             $table->string('name');      // 支店名
-            $table->string('postcode');
-            $table->string('address');  // 地域など
             $table->text('note')->nullable(); // 備考
             $table->timestamps();
         });

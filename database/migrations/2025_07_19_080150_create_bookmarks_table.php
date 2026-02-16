@@ -15,7 +15,6 @@ return new class extends Migration
 			$table->id();
 			$table->foreignId('user_id')->constrained()->onDelete('cascade');
 			$table->foreignId('post_id')->constrained()->onDelete('cascade');
-			$table->foreignId('store_id')->nullable(); // ← store_id が必要なら
 			$table->timestamps();
 		});
 	}

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use App\Models\Answer;
 use App\Models\Post;
 use Illuminate\Support\Facades\Storage;
-use App\Notifications\BestAnswerChosen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -14,16 +13,22 @@ class AnswerController extends Controller
 {
 	use AuthorizesRequests;
 
+	/*
+		回答内容の確認画面
+	*/
 	public function confirm(Request $request, ImageService $imageService)
 	{
+		// 入力チェック
 		$request->validate([
 			'post_id' => 'required|exists:posts,id',
 			'content' => 'required|string|max:1500',
 			'images.*' => 'nullable|image',
 		]);
 
+		// セッションから画像取得
 		$pendingImages = session('pending_images', []);
 
+		// 一時フォルダに画像保存
 		if ($request->hasFile('images')) {
 			foreach ($request->file('images') as $file) {
 				$pendingImages[] = $imageService->saveTemp($file);
@@ -38,6 +43,9 @@ class AnswerController extends Controller
 		]);
 	}
 
+	/*
+		確認画面から戻る
+	*/
 	public function back(Request $request)
 	{
 		// 入力内容を復元
@@ -46,7 +54,7 @@ class AnswerController extends Controller
 		// 確認画面から戻ったフラグ
 		session()->put('_from_confirm', true);
 
-		// 画像も復元（hidden で送られてきた temp_images[]）
+		// 画像を復元（hidden で送られてきた temp_images[]）
 		if ($request->has('temp_images')) {
 			session()->put('pending_images', $request->temp_images);
 		}
@@ -54,15 +62,19 @@ class AnswerController extends Controller
 		return redirect()->route('posts.show', $request->input('post_id'));
 	}
 
-	
+	/*
+		回答を保存
+	*/
 	public function store(Request $request, ImageService $imageService)
 	{
+		// 入力チェック
 		$answer = Answer::create([
 			'post_id' => $request->post_id,
 			'user_id' => Auth::id(),
 			'comment' => $request->content,
 		]);
 
+		// 画像フォルダに画像保存
 		foreach (session()->pull('pending_images', []) as $tempPath) {
 			$newPath = $imageService->moveToPermanent($tempPath);
 
@@ -75,6 +87,9 @@ class AnswerController extends Controller
 			->with('success', '回答を投稿しました');
 	}
 
+	/*
+		ベスト回答を選ぶ（権限チェックあり）
+	*/
 	public function markBest(Answer $answer)
 	{
 		$this->authorize('markBest', $answer);
@@ -85,7 +100,7 @@ class AnswerController extends Controller
 		// この回答をベストに設定
 		$answer->update(['is_best' => true]);
 
-		// 投稿も解決状態に更新
+		// 投稿を解決状態に更新
 		$answer->post->update(['is_solved' => true]);
 
 		return back()->with('success', '解決策を選び、投稿を解決済みに設定しました');

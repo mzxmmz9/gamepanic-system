@@ -20,26 +20,25 @@
 				<div><span class="font-semibold">会社区分：</span>{{ $selectedMachine['ownership'] ?? '情報なし' }}</div>
 				<div class="md:col-span-2"><span class="font-semibold">本社コメント：</span>{{ $selectedMachine['note'] ?? '情報なし' }}</div>
 
-				{{-- 
-				<div><span class="font-semibold">休止理由・機械状態①：</span>{{ $selectedMachine[''] }}</div>
-				<div><span class="font-semibold">休止理由・機械状態②：</span>{{ $selectedMachine[''] }}</div>
-				<div><span class="font-semibold">休止理由・機械状態③：</span>{{ $selectedMachine[''] }}</div>
-				<div><span class="font-semibold">休止理由・機械状態④：</span>{{ $selectedMachine[''] }}</div>
-				<div><span class="font-semibold">休止理由・機械状態⑤：</span>{{ $selectedMachine[''] }}</div>
-				--}}
 			</div>
 
 			{{-- 選択マシン情報end --}}
 			<hr class="my-6 border-t border-dashed border-gray-300">
 
 			<div class="text-right">
-				<x-button
-					wire:click="$dispatch('reflectForm', { selectedMachineCode: '{{ $selectedMachine['code'] }}' })"
-					wire:key="{{ $selectedMachine['code'] }}"
-					label="このマシンについて起票する"
-					variant="secondary"
-					x-on:click="document.getElementById('report-form')?.scrollIntoView({ behavior: 'smooth' })"
-				/>
+				<form method="POST" action="{{ route('failure_reports.form-create') }}">
+					@csrf
+
+					{{-- Livewire の値を hidden で送る --}}
+					<input type="hidden" name="machine_code" value="{{ $selectedMachine['code'] }}">
+
+					<button
+						type="submit"
+						class="px-4 py-2 bg-gray-200 rounded"
+					>
+						このマシンについて起票する
+					</button>
+				</form>
 			</div>
 		@else
 			<p class="text-gray-500">マシンが選択されていません</p>

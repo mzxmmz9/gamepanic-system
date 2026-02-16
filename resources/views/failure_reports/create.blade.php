@@ -11,7 +11,6 @@
 	">
 		<livewire:machine-selector />
 		<livewire:failure-report-machine-detail :showMachineCode="$machineCode ?? '' "/>
-		<livewire:failure-report-form-create :selectedMachineCode="$machineCode ?? '' "/>
 	</div>
 
 </x-app-layout>

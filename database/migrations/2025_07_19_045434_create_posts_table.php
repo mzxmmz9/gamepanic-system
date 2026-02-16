@@ -16,10 +16,9 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->boolean('is_solved')->default(false);
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('store_id')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('set null');
+            $table->foreignId('branch_id')->constrained()->nullable()->onDelete('set null');
             $table->timestamps();
-            $table->softDeletes(); // ← 論理削除を使うなら
         });
     }
 

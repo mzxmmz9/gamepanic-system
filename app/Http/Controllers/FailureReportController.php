@@ -20,7 +20,7 @@ class FailureReportController extends Controller
 		// 選択された店舗ID（未選択なら null）
 		$selectedBranch = $request->branch_id;
 
-		// レポート取得（店別フィルタ対応）
+		// レポート取得
 		$query = FailureReport::whereNull('resumed_at');
 
 		if (!empty($selectedBranch)) {
@@ -46,13 +46,21 @@ class FailureReportController extends Controller
 		return view('failure_reports.create');
 	}
 	
+	/**
+	 * Show the form for creating a new resource.
+	 */
+	public function formCreate(Request $request)
+	{
+	    $machineCode = $request->machine_code;
+		return view('failure_reports.form-create', compact('machineCode'));
+	}
+
 	public function confirm()
 	{
-
 		$data = session('report_data');
 
 		if (!$data) {
-			return redirect()->route('failure_reports.submit')->with('error', '確認データがありません');
+			return redirect()->route('failure_reports.create')->with('error', '確認データがありません');
 		}
 
 		return view('failure_reports.confirm', compact('data'));
@@ -113,7 +121,6 @@ class FailureReportController extends Controller
 		}
 
 		// 既存レコードを更新する場合
-		// 例: hiddenでidを送っているなら $request->input('id') を使う
 		if (isset($data['id'])) {
 			$report = FailureReport::findOrFail($data['id']);
 			$report->update($data);
