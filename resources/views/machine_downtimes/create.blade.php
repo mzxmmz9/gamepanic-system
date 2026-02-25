@@ -8,8 +8,10 @@
 		 mx-auto bg-white p-6 rounded-lg shadow-md space-y-6 mt-8
 	">
 		<livewire:machine-selector />
-		<livewire:failure-report-machine-detail :showMachineCode="$machineCode ?? '' "/>
-		<livewire:downtime-report-create :selectedMachineCode="$machineCode ?? '' "/>
+		<livewire:failure-report-machine-detail 
+			:showMachineCode="$machineCode ?? ''"
+			:selectedBranch="$selectedBranch ?? ''"
+		/>
 	</div>
 
 </x-app-layout>

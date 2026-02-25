@@ -9,11 +9,14 @@ use Livewire\Attributes\On;
 class FailureReportMachineDetail extends Component
 {
 	public $showMachineCode = '';
+	public $selectedBranch = '';
 	public array $selectedMachine = [];
 
+
 	#[On('updateDetail')]
-	public function handleUpdateDetail(string $showMachineCode)
+	public function handleUpdateDetail(string $showMachineCode, string $selectedBranch)
 	{
+		$this->selectedBranch = $selectedBranch;
 		$this->$showMachineCode = $showMachineCode;
 		$details = ViewMachine::findCode($showMachineCode);
 

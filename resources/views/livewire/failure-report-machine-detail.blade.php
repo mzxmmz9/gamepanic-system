@@ -1,5 +1,6 @@
 <div id="machine-detail" class="mt-6">
 	<div class="bg-white shadow-sm border rounded-lg p-6">
+		
 		@if (!empty($selectedMachine))
 			{{-- 選択マシン情報 --}}
 			<h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">選択中のマシン情報</h3>
@@ -33,6 +34,7 @@
 					@foreach ($selectedMachine as $key => $value)
 						<input type="hidden" name="machine[{{ $key }}]" value="{{ $value }}">
 					@endforeach
+					<input type="hidden" name="machine[selected_branch]" value="{{ $selectedBranch }}">
 
 					<button
 						type="submit"

@@ -51,7 +51,6 @@ class FailureReportController extends Controller
 	 */
 	public function formCreate(Request $request)
 	{
-
 	    $machine = $request->input('machine'); 
 		return view('failure_reports.form-create', compact('machine'));
 	}
@@ -83,6 +82,7 @@ class FailureReportController extends Controller
 	{
 		// バリデーション
 		$validated = $request->validate([
+			'branch_id' => 'required|string',
 			'occurred_at' => 'required|date',
 			'occurred_by' => 'required|string',
 			'process' => 'required|string',

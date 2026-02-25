@@ -32,7 +32,10 @@
 				<tbody>
 					@foreach($machines as $machine)
 						<tr
-							wire:click="$dispatch('updateDetail', { showMachineCode: '{{ $machine->code }}' })"
+							wire:click="$dispatch('updateDetail', { 
+								showMachineCode: '{{ $machine->code }}',
+								selectedBranch: '{{ $selectedBranch }}'
+							})"
 							wire:key="{{ $machine->code }}"
 							class="cursor-pointer odd:bg-gray-100 even:bg-white hover:bg-indigo-100 transition"
 							x-on:click="document.getElementById('machine-detail')?.scrollIntoView({ behavior: 'smooth' })"

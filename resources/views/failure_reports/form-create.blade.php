@@ -76,7 +76,7 @@
             <textarea name="note" placeholder="備考">{{ old('note', $note ?? '') }}</textarea>
         </div>
 
-        <input type="hidden" name="branch_id" value="{{ $machine['branch'] }}">
+        <input type="hidden" name="branch_id" value="{{ $machine['selected_branch'] }}">
 
         <button type="submit">内容を確認する</button>
     </form>
