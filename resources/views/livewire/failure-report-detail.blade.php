@@ -21,14 +21,19 @@
 			{{-- 選択マシン情報end --}}
 			<hr class="my-6 border-t border-dashed border-gray-300">
 
-			<div x-data class="text-right">
-				<x-button
-					wire:click="$dispatch('reportForm-updateRef', { reportJson: {{ json_encode($selectedReport) }} })"
-					wire:key="{{ $selectedReport['id'] }}"
-					label="この報告書に稼働日を登録する"
-					variant="secondary"
-					x-on:click="document.getElementById('report-form')?.scrollIntoView({ behavior: 'smooth' })"
-				/>
+			<div class="text-right">
+				<form method="POST" action="{{ route('failure_reports.form-update') }}">
+					@csrf
+
+					<input type="hidden" name="report" value="{{ json_encode($selectedReport) }}">
+
+					<button
+						type="submit"
+						class="px-4 py-2 bg-gray-200 rounded"
+					>
+						この報告書に稼働日を登録する
+					</button>
+				</form>
 			</div>
 		@else
 			<p class="text-gray-500">報告書が選択されていません。</p>

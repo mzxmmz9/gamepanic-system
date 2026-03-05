@@ -60,7 +60,6 @@
 		</div>
 
 		<livewire:failure-report-detail />
-		<livewire:failure-report-form-update :reportJson="$reportJson ?? ''"/>
 	</div>
 
 

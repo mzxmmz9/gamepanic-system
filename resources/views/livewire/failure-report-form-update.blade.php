@@ -1,3 +1,10 @@
+<x-app-layout>
+	<x-slot name="header">
+		<h2 class="text-xl font-bold text-gray-800">
+		{{ __('マシン稼働状況更新') }}
+		</h2>
+	</x-slot>
+
 <div>
     <div class="mx-auto p-6 bg-white rounded-lg shadow-md">
         <form wire:submit.prevent="submit" wire:key="{{ $machine_code }}" class="space-y-5">
@@ -117,3 +124,5 @@
         <p class="text-green-600 mt-3">{{ session('message') }}</p>
     @endif
 </div>
+
+</x-app-layout>

@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
 	Route::get('/failure_reports/create', [FailureReportController::class, 'create'])->name('failure_reports.create');
 	// 入力処理（POST）
 	Route::post('/failure_reports/form-create', [FailureReportController::class, 'formCreate'])->name('failure_reports.form-create');
+	Route::post('/failure_reports/form-update', [FailureReportController::class, 'formUpdate'])->name('failure_reports.form-update');
 	// 確認画面（POST/GET）
 	Route::match(['get', 'post'],'/failure_reports/confirm', [FailureReportController::class, 'confirm'])->name('failure_reports.confirm');
 	Route::match(['get', 'post'],'/failure_reports/confirm-update', [FailureReportController::class, 'confirmUpdate'])->name('failure_reports.confirm-update');

@@ -51,7 +51,7 @@
 			</div>
 
 			<div class="mt-8 flex justify-between">
-				<a href="{{ route('failure_reports.index') }}"
+				<a href="{{ route('failure_reports.form-update') }}"
 				   class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
 					戻る
 				</a>
@@ -65,7 +65,7 @@
 			</div>
 		@else
 			<p class="text-red-600">確認データが見つかりませんでした。</p>
-			<a href="{{ route('failure_reports.index') }}" class="text-blue-500 underline">フォームに戻る</a>
+			<a href="{{ route('failure_reports.form-update') }}" class="text-blue-500 underline">フォームに戻る</a>
 		@endif
 	</div>
 </x-app-layout>

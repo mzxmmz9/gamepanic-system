@@ -65,18 +65,29 @@ class FailureReportController extends Controller
 		]);
 	}
 
-	public function confirmUpdate()
+	/**
+	 * Show the form for creating a new resource.
+	 */
+	public function formUpdate(Request $request)
 	{
+		$report = json_decode($request->input('report'), true);
 
-		$data = session('report_data');
-
-		if (!$data) {
-			return redirect()->route('failure_reports.submit')->with('error', '確認データがありません');
-		}
-
-		return view('failure_reports.confirm-update', compact('data'));
+		return view('failure_reports.form-update', [
+			'report' => $report,
+		]);
 	}
 
+	public function confirmUpdate(Request $request)
+	{
+		// 入力画面から送られてきた値を全部取得
+		$data = $request->all();
+
+		// セッションに保存（confirm-update.blade がこれを読む）
+		session(['report_data' => $data]);
+
+		// Blade に渡す必要はない（session から読むため）
+		return view('failure_reports.confirm-update');
+	}
 
 	public function store(Request $request)
 	{
@@ -114,32 +125,41 @@ class FailureReportController extends Controller
 
 	/**
 	 * Update the specified resource in storage.
-	 */
+	*/
 	public function update(Request $request)
 	{
-		// セッションから確認用データを取り出す
+		// confirm-update で保存したデータを取得
 		$data = session('report_data');
 
 		if (!$data) {
-			// セッションが空なら一覧に戻す
-			return redirect()->route('failure_reports.index')
-							 ->with('error', '更新データが見つかりませんでした。');
+			return redirect()
+				->route('failure_reports.index')
+				->with('error', '更新データが見つかりませんでした。');
 		}
 
-		// 既存レコードを更新する場合
-		if (isset($data['id'])) {
-			$report = FailureReport::findOrFail($data['id']);
-			$report->update($data);
-		} else {
-			// 新規作成の場合
-			FailureReport::create($data);
+		// 更新対象のレコードを取得
+		$report = FailureReport::find($data['id']);
+
+		if (!$report) {
+			return redirect()
+				->route('failure_reports.index')
+				->with('error', '対象の報告書が見つかりませんでした。');
 		}
 
-		// セッションをクリア
+		// 更新処理
+		$report->update([
+			'process'     => $data['process'],
+			'resumed_at'  => $data['resumed_at'],
+			'resumed_by'  => $data['resumed_by'],
+			'note'        => $data['note'],
+		]);
+
+		// セッション削除
 		session()->forget('report_data');
 
-		return redirect()->route('failure_reports.index')
-						 ->with('success', '故障報告を保存しました。');
+		return redirect()
+			->route('failure_reports.index')
+			->with('message', '報告書を更新しました。');
 	}
 
 

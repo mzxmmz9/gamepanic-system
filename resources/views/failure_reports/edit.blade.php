@@ -13,7 +13,6 @@
 	">
 		<livewire:failure-report-list :reports="$reports ?? ''"/>
 		<livewire:failure-report-detail />
-		<livewire:failure-report-form-update :reportJson="$reportJson ?? ''"/>
 	</div>
 
 
